@@ -101,8 +101,8 @@ if ( ! $requirements->satisfied() ) {
 Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-wpclient/', __FILE__, 'somecaptionswpclient' );
 
 if ( ! wp_installing() ) {
-	register_activation_hook( SW_TEXTDOMAIN . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
-	register_deactivation_hook( SW_TEXTDOMAIN . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
+	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
+	register_deactivation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
 	add_action(
 		'plugins_loaded',
 		static function () use ( $somecaptionswpclient_libraries ) {
