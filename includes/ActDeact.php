@@ -145,7 +145,7 @@ class ActDeact{
 		$ep          = '/api/wpclient/offline';
 		ApiClient::request( $ep, $form_params );
 		\delete_option( SW_TEXTDOMAIN . '-init' );
-        // \delete_option( SW_TEXTDOMAIN . '-settings' );
+        \delete_option( SW_TEXTDOMAIN . '-settings' );
 		// Clear the permalinks
 		\flush_rewrite_rules();
 	}
