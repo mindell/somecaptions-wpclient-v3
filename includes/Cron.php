@@ -59,7 +59,7 @@ class Cron{
         $form_params = array();
         $res         = ApiClient::request( $ep, $form_params );
         if( $res ) {
-            $body = \json_decode( (string) $res->getBody() );
+            $body = json_decode( (string) $res->getBody() );
             if( $body->success ) {
                 $articles  = $body->articles;
                 $Parsedown = new Parsedown();
@@ -71,11 +71,47 @@ class Cron{
                         'post_category'	=> array( $article->domain_category->term_id ),
                         'post_content'  => $Parsedown->text( $article->content ),
                         'post_name'     => \sanitize_title( $article->title ),
+                        'post_author'   => \get_option( SW_TEXTDOMAIN . '-user_id' ),
+                        'post_date'     => $article->publish_at,
                     );
-    
-                    $post_id = \wp_insert_post( $post_arg );
-                    if( $post_id ) {
-                        $epoint          = '/api/wpclient/published/' . $article->id;
+                    $post_id = \wp_insert_post( $post_arg, true );
+                    if( !\is_wp_error($post_id) ) {
+                        $image_bin        = base64_decode( $article->web_format_image );
+                        $upload_dir       = \wp_upload_dir();
+                        $upload_path      = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+                        $image_name       = \sanitize_title( $article->title ) . '.jpg';
+                        $unique_file_name = \wp_unique_filename($upload_dir['path'], $image_name);
+                        $filename         = basename($unique_file_name);
+                        // HANDLE UPLOADED FILE
+                        if( !function_exists( 'wp_handle_sideload' ) ) {
+                            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+                        }
+
+                        // Check folder permission and define file location
+                        if (\wp_mkdir_p($upload_dir['path'])) {
+                            $file = $upload_dir['path'] . '/' . $filename;
+                        } else {
+                            $file = $upload_dir['basedir'] . '/' . $filename;
+                        }
+
+                        file_put_contents( $file, $image_bin );
+                        $attachment  = array(
+                            'post_mime_type' => 'image/jpeg',
+                            'post_title'     => \sanitize_file_name( $filename ),
+                            'post_content'   => '',
+                            'post_status'    => 'inherit',
+                        );
+                        // Create the attachment
+                        $attach_id   = \wp_insert_attachment( $attachment, $file, $post_id );
+                        // Include image.php
+                        require_once ABSPATH . 'wp-admin/includes/image.php';
+                        // Define attachment metadata
+                        $attach_data = \wp_generate_attachment_metadata( $attach_id, $file );
+                        // Assign metadata to attachment
+                        \wp_update_attachment_metadata( $attach_id, $attach_data );
+                        // And finally assign featured image to post
+                        $thumbnail   = \set_post_thumbnail( $post_id, $attach_id );
+                        $epoint      = '/api/wpclient/published/' . $article->id;
                         $form_params = array();
                         ApiClient::request( $epoint, $form_params );
                     }

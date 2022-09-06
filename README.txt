@@ -2,7 +2,7 @@
 Contributors: (this should be a list of wordpress.org userid's)
 Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
-Requires at least: 5.3
+Requires at least: 5.2
 Tested up to: 6.0
 Stable tag: 1.0.0
 License: GPLv3 or later
@@ -95,7 +95,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 == Upgrade Notice ==
 
 = 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+* The author of the posts created by the plugin will be "SEO af SoMe Captions".
+* The publish date will be set from SoMe Captions API.
+* Add image attachment to posts.
 
 = 0.5 =
 This version fixes a security related bug.  Upgrade immediately.

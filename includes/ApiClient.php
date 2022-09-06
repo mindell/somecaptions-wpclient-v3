@@ -112,8 +112,8 @@ class ApiClient{
 	protected static function _error($message) {
 		global $pagenow;
 		if ( isset( $_GET['page'] ) ) {
-			if ( $_GET['page'] == SW_TEXTDOMAIN && $pagenow=='admin.php' ) {
-				\wpdesk_wp_notice( SW_TEXTDOMAIN.': '.$message, 'error',true );
+			if ( $_GET['page'] == SW_TEXTDOMAIN && $pagenow == 'admin.php' ) {
+				\wpdesk_wp_notice( SW_TEXTDOMAIN . ': ' .$message, 'error', true );
 			}
 
 		}

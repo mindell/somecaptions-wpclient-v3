@@ -37,8 +37,8 @@ class ApiInitialize {
                             'hide_empty' => 0,
                         ) );
                         $param_categories = array();
-                        foreach($categories as $category) {
-                            if($category->taxonomy == 'category') {
+                        foreach( $categories as $category ) {
+                            if( $category->taxonomy == 'category' ) {
                                 $param_categories[$category->term_id] = $category->name;
                             }
 
@@ -50,16 +50,60 @@ class ApiInitialize {
                         $res         = ApiClient::request( $epoint, $form_params );
                         if( $res ) {
                             $body = \json_decode( (string)  $res->getBody() );
-                            if($body->success){
-                                \add_option( SW_TEXTDOMAIN . '-init', true );
+                            if( $body->success ) {
+                                $user_created = $this->_create_user( $opts['api_key'] );
+                                if( $user_created ) {
+                                    \add_option( SW_TEXTDOMAIN . '-init', true );
+                                }
+
                             }
+
                         }
 
                     }   
+
                 }
             }
 
         }
 
     }
+    
+    /**
+     * Create SEO af SoMe Captions user.
+     * 
+     * @param string $key
+     * 
+     * @return bool
+     * 
+     * @since 1.0.0
+     */
+    private function _create_user( $key ) {
+        if( \get_option( SW_TEXTDOMAIN . '-user_id' ) ) {
+            return true;
+        }
+
+        $passw = substr( $key, 0, 15 );
+        $userdata = array(
+            'user_pass'     => $passw,
+            'user_login'    => 'somecaptions',
+            'user_nicename' => 'seo-af-somecaptions',
+            'user_url'      => 'https://somecaptions.dk',
+            'user_email'    => 'seo@somecaptions.dk',
+            'display_name'  => 'SEO af SoMe Captions',
+            'role'          => 'author',
+        );
+
+        $user_id = \wp_insert_user( $userdata );
+        if( is_int($user_id) ){
+            \add_option( SW_TEXTDOMAIN . '-user_id', $user_id );
+            return true;
+        }
+        else {
+            \wpdesk_wp_notice( SW_TEXTDOMAIN . ': ' . $user_id->get_error_message(), 'error', true );
+        }
+
+        return false;
+    }
+    
 }

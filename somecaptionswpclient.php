@@ -7,10 +7,10 @@
  * @license   GPL 2.0+
  * @link      https://github.com/mindell/
  *
- * Plugin Name:     SomeCaptions WPClient
+ * Plugin Name:     SoMeCaptions WPClient
  * Plugin URI:      https://github.com/mindell/somecaptions-wpclient
  * Description:     WP plugin for somecaptions.dk
- * Version:         0.0.1
+ * Version:         1.0.0
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
  * Text Domain:     somecaptionswpclient
@@ -28,11 +28,11 @@ if ( !defined( 'ABSPATH' ) ) {
 
 define( 'SW_VERSION', '1.0.0' );
 define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
-define( 'SW_NAME', 'SomeCaptions WPClient' );
+define( 'SW_NAME', 'SoMeCaptions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
 define( 'SW_PLUGIN_ABSOLUTE', __FILE__ );
 define( 'SW_MIN_PHP_VERSION', '7.4' );
-define( 'SW_WP_VERSION', '5.3' );
+define( 'SW_WP_VERSION', '5.2' );
 
 add_action(
 	'init',
@@ -54,7 +54,7 @@ if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<=' ) ) {
 			echo wp_kses_post(
 			sprintf(
 				'<div class="notice notice-error"><p>%s</p></div>',
-				__( '"SomeCaptions WPClient" requires PHP 5.6 or newer.', SW_TEXTDOMAIN )
+				__( '"SomeCaptions WPClient" requires PHP ' . SW_MIN_PHP_VERSION . ' or newer.', SW_TEXTDOMAIN )
 			)
 			);
 		}

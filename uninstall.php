@@ -33,10 +33,6 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * @return void
  */
 function sw_uninstall_multisite() {
-	if( get_option( SW_TEXTDOMAIN . '-settings' ) ){
-		delete_option( SW_TEXTDOMAIN . '-settings' );
-	}
-	
 	if ( is_multisite() ) {
 		/** @var array<\WP_Site> $blogs */
 		$blogs = get_sites();
