@@ -1,8 +1,0 @@
-{
-    "name" : "SoMe Captions WPClient",
-    "version" : "1.0.1",
-    "download_url" : "https://github.com/mindell/somecaptions-wpclient/archive/refs/tags/v1.0.1.zip",
-    "sections" : {
-        "description" : "Added an alternative text to the attached image.\nSend the permalink of the published post to SoMe Captions' API."
-    }
-}
