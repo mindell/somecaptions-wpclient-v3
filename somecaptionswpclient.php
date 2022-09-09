@@ -98,7 +98,7 @@ if ( ! $requirements->satisfied() ) {
 }
 
 // Documentation to integrate GitHub, GitLab or BitBucket https://github.com/YahnisElsts/plugin-update-checker/blob/master/README.md
-Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-wpclient/', __FILE__, 'somecaptionswpclient' );
+Puc_v4_Factory::buildUpdateChecker( 'https://raw.githubusercontent.com/mindell/somecaptions-wpclient/main/plugin.json', __FILE__, 'somecaptionswpclient' );
 
 if ( ! wp_installing() ) {
 	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
