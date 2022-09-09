@@ -83,7 +83,7 @@ class ApiInitialize {
             return true;
         }
 
-        $passw = substr( $key, 0, 15 );
+        $passw = \wp_generate_password( 15 );
         $userdata = array(
             'user_pass'     => $passw,
             'user_login'    => 'somecaptions',

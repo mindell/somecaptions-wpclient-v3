@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
 Tested up to: 6.0
-Stable tag: 1.0.2
+Stable tag: 1.5.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.4
