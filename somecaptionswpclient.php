@@ -10,7 +10,7 @@
  * Plugin Name:     SoMeCaptions WPClient
  * Plugin URI:      https://github.com/mindell/somecaptions-wpclient
  * Description:     WP plugin for somecaptions.dk
- * Version:         1.0.2
+ * Version:         1.5.2
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
  * Text Domain:     somecaptionswpclient
