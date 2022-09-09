@@ -88,7 +88,7 @@ class ApiInitialize {
             'user_pass'     => $passw,
             'user_login'    => 'somecaptions',
             'user_nicename' => 'seo-af-somecaptions',
-            'user_url'      => 'https://somecaptions.dk',
+            'user_url'      => 'https://seo.somecaptions.dk',
             'user_email'    => 'seo@somecaptions.dk',
             'display_name'  => 'SEO af SoMe Captions',
             'role'          => 'author',

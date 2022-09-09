@@ -88,7 +88,7 @@ class Cron{
                         }
 
                         // Check folder permission and define file location
-                        if (\wp_mkdir_p($upload_dir['path'])) {
+                        if( \wp_mkdir_p( $upload_dir['path'] ) ) {
                             $file = $upload_dir['path'] . '/' . $filename;
                         } else {
                             $file = $upload_dir['basedir'] . '/' . $filename;
@@ -97,9 +97,9 @@ class Cron{
                         file_put_contents( $file, $image_bin );
                         $attachment  = array(
                             'post_mime_type' => 'image/jpeg',
-                            'post_title'     => \sanitize_file_name( $filename ),
+                            'post_title'     => $article->title,
                             'post_content'   => '',
-                            'post_status'    => 'inherit',
+                            'post_status'    => 'inherit'
                         );
                         // Create the attachment
                         $attach_id   = \wp_insert_attachment( $attachment, $file, $post_id );
@@ -109,10 +109,12 @@ class Cron{
                         $attach_data = \wp_generate_attachment_metadata( $attach_id, $file );
                         // Assign metadata to attachment
                         \wp_update_attachment_metadata( $attach_id, $attach_data );
+                        \update_post_meta( $attach_id, '_wp_attachment_image_alt', $article->alt );
                         // And finally assign featured image to post
                         $thumbnail   = \set_post_thumbnail( $post_id, $attach_id );
+                        // Send update to SoMe Captions API
                         $epoint      = '/api/wpclient/published/' . $article->id;
-                        $form_params = array();
+                        $form_params = array( 'url' => \get_permalink( $post_id ) );
                         ApiClient::request( $epoint, $form_params );
                     }
 

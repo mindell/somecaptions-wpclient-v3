@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
 Tested up to: 6.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.4
@@ -92,12 +92,15 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 = 0.0.1 =
 * Basic changes. Non functional.
 
-== Upgrade Notice ==
-
 = 1.0 =
 * The author of the posts created by the plugin will be "SEO af SoMe Captions".
 * The publish date will be set from SoMe Captions API.
 * Add image attachment to posts.
+
+= 1.0.1 =
+* Added alternative text
+
+== Upgrade Notice ==
 
 = 0.5 =
 This version fixes a security related bug.  Upgrade immediately.
