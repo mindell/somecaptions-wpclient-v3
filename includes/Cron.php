@@ -65,7 +65,7 @@ class Cron{
                 $Parsedown = new Parsedown();
                 foreach( $articles as $article ) {
                     $post_arg = array(
-                        'post_type'     => 'post',
+                        'post_type'     => $article->type,
                         'post_status'   => 'publish',
                         'post_title'    => $article->title,
                         'post_category'	=> array( $article->domain_category->term_id ),
