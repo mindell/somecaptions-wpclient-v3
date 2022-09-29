@@ -30,7 +30,7 @@ class Cron{
             // schedule (specific interval) or single (at the time specified)
             'schedule'         => 'schedule',
             // Name of the Cron job used internally
-            'name'             => 'somecaptions_cronjob_publisher',
+            'name'             => SW_CRON_NAME,
             // Callback to execute when the cron job is launched
             'cb'               => array( & $this, 'publish' ),
             // Multisite support disabled by default
@@ -55,8 +55,25 @@ class Cron{
      * @return void
      */
     public function publish() {
+        $timestamp = null;
+        $crons     = \_get_cron_array();
+        foreach( $crons as $ts => $cron ) {
+            if( is_array($cron) ) {
+                foreach( $cron as $name => $eventInfo ) {
+                    if( $name == SW_CRON_NAME ) {
+                        $timestamp = (int) $ts;
+                        break; 
+                    }
+                }
+            }
+        }
+
+        if( !$timestamp ) {
+            $timestamp = strtotime( '+1 hour' );
+        }
+        
         $ep          = '/api/wpclient/publish';
-        $form_params = array();
+        $form_params = array( 'timestamp' => $timestamp );
         $res         = ApiClient::request( $ep, $form_params );
         if( $res ) {
             $body = json_decode( (string) $res->getBody() );

@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
 Tested up to: 6.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.4
@@ -108,6 +108,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 = 1.5.3 =
 * The post type could be either `post` or `page`.
+
+= 1.5.4 =
+* Send publish event schedule to API.
 
 == Upgrade Notice ==
 
