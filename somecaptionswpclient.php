@@ -10,7 +10,7 @@
  * Plugin Name:     SoMeCaptions WPClient
  * Plugin URI:      https://github.com/mindell/somecaptions-wpclient
  * Description:     WP plugin for somecaptions.dk
- * Version:         1.6.0
+ * Version:         1.7.0
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
  * Text Domain:     somecaptionswpclient
@@ -26,14 +26,15 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'We\'re sorry, but you can not directly access this file.' );
 }
 
-define( 'SW_VERSION', '1.6.0' );
+define( 'SW_VERSION', '2.0.0.beta' );
 define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
-define( 'SW_NAME', 'SoMeCaptions WPClient' );
+define( 'SW_NAME', 'SoMe Captions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
 define( 'SW_PLUGIN_ABSOLUTE', __FILE__ );
 define( 'SW_MIN_PHP_VERSION', '7.4' );
 define( 'SW_WP_VERSION', '5.2' );
 define( 'SW_CRON_NAME', 'somecaptions_cronjob_publisher');
+define( 'SW_SIGNIN_HOST', 'http://localhost:3000/gsc_signin' );
 
 add_action(
 	'init',
@@ -55,7 +56,7 @@ if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<=' ) ) {
 			echo wp_kses_post(
 			sprintf(
 				'<div class="notice notice-error"><p>%s</p></div>',
-				__( '"SomeCaptions WPClient" requires PHP ' . SW_MIN_PHP_VERSION . ' or newer.', SW_TEXTDOMAIN )
+				__( '"SoMe Captions WPClient" requires PHP ' . SW_MIN_PHP_VERSION . ' or newer.', SW_TEXTDOMAIN )
 			)
 			);
 		}
@@ -84,7 +85,7 @@ function sw_get_settings() {
 // Add your new plugin on the wiki: https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki/Plugin-made-with-this-Boilerplate
 
 $requirements = new \Micropackage\Requirements\Requirements(
-	'SomeCaptions WPClient',
+	'SoMe Captions WPClient',
 	array(
 		'php'            => SW_MIN_PHP_VERSION,
 		'php_extensions' => array( 'mbstring' ),

@@ -78,6 +78,12 @@ class Cron{
         if( $res ) {
             $body = json_decode( (string) $res->getBody() );
             if( $body->success ) {
+                $gsc_connected = \get_option( SW_TEXTDOMAIN . '-gsc-connected' );
+                if( isset($body->gsc_connected ) && !$gsc_connected ) {
+                    \add_option( SW_TEXTDOMAIN . '-gsc-connected', true );
+                } else if( !isset($body->gsc_connected ) && $gsc_connected ) {
+                    \delete_option( SW_TEXTDOMAIN . '-gsc-connected' );
+                }
                 $articles  = $body->articles;
                 $Parsedown = new Parsedown();
                 foreach( $articles as $article ) {

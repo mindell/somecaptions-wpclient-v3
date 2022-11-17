@@ -5,6 +5,10 @@
  * phpcs:ignore  $my_settings = get_option( SW_TEXTDOMAIN . '-settings', 'default too' );
  * CMB2 Snippet: https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/theme-options-cmb.php
  */
+
+ $parsed_url = parse_url(site_url());
+ $initialized = \get_option( SW_TEXTDOMAIN . '-init' );
+ $gsc_connected = get_option( SW_TEXTDOMAIN . '-gsc-connected' );
 ?>
 <div id="tabs-1" class="wrap">
 			<?php
@@ -38,4 +42,12 @@
 
 			cmb2_metabox_form( SW_TEXTDOMAIN . '_options', SW_TEXTDOMAIN . '-settings' );
 			?>
+
+			<?php if( !$gsc_connected && $initialized ):?>
+				<br />
+				<button 
+				class="button-primary"
+				onClick="open_app_gw('<?php echo SW_SIGNIN_HOST . '/' . $parsed_url['host']; ?>')"
+				>Connect Google Search Console</button>
+			<?php endif;?>
 		</div>

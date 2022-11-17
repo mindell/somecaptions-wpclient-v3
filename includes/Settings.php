@@ -21,6 +21,10 @@ class Settings{
      * 
      */
     public function __construct() {
+		
+		//add scripts
+		\add_action( 'wp_enqueue_scripts', array( $this, 'add_signin_script' ));
+		\wp_enqueue_scripts();
         // Add the options page and menu item.
 		\add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
@@ -40,7 +44,7 @@ class Settings{
 		 * Add a settings page for this plugin to the main menu
 		 *
 		 */
-		\add_menu_page( \__( 'SomeCaptions WPClient Settings', SW_TEXTDOMAIN ), SW_NAME, 'manage_options', SW_TEXTDOMAIN, array( $this, 'display_plugin_admin_page' ), 'dashicons-hammer', 90 );
+		\add_menu_page( \__( 'SoMe Captions WPClient Settings', SW_TEXTDOMAIN ), SW_NAME, 'manage_options', SW_TEXTDOMAIN, array( $this, 'display_plugin_admin_page' ), 'dashicons-hammer', 90 );
 	}
 
     /**
@@ -67,5 +71,20 @@ class Settings{
 			),
 			$links
 		);
+	}
+
+	/**
+	 * Add a custom script for GSC login
+	 * 
+	 * @since 1.7.0
+	 * @return void
+	 */
+	public function add_signin_script() {
+		\wp_enqueue_script( 'gsc_signin_script', 
+							plugin_dir_url( __DIR__ . '/../../' ) . 'backend/js/gsc_signin.js',
+							[],
+							'1.6.8',// SW_VERSION,
+							true // @footer
+						  );
 	}
 }

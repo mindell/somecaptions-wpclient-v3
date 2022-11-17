@@ -146,6 +146,11 @@ class ActDeact{
 		ApiClient::request( $ep, $form_params );
 		\delete_option( SW_TEXTDOMAIN . '-init' );
         \delete_option( SW_TEXTDOMAIN . '-settings' );
+		$gsc_connected = \get_option( SW_TEXTDOMAIN . '-gsc-connected' );
+		if( $gsc_connected ) {
+			\delete_option( SW_TEXTDOMAIN . '-gsc-connected' );
+		}
+		
 		// Clear the permalinks
 		\flush_rewrite_rules();
 	}
