@@ -26,7 +26,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'We\'re sorry, but you can not directly access this file.' );
 }
 
-define( 'SW_VERSION', '2.0.0.beta' );
+define( 'SW_VERSION', '2.0.1.beta' );
 define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
 define( 'SW_NAME', 'SoMe Captions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
@@ -34,7 +34,7 @@ define( 'SW_PLUGIN_ABSOLUTE', __FILE__ );
 define( 'SW_MIN_PHP_VERSION', '7.4' );
 define( 'SW_WP_VERSION', '5.2' );
 define( 'SW_CRON_NAME', 'somecaptions_cronjob_publisher');
-define( 'SW_SIGNIN_HOST', 'http://localhost:3000/gsc_signin' );
+define( 'SW_SIGNIN_HOST', 'https://app1.somecaptions.dk/gsc_signin' );
 
 add_action(
 	'init',
