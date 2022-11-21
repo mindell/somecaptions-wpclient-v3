@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
 Tested up to: 6.0
-Stable tag: 1.6.0
+Stable tag: 2.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.4
@@ -114,6 +114,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 = 1.6.0 =
 * Disabled WP_Cron
+
+= 2.0.2 =
+* Enable GSC auto-indexing
 
 == Upgrade Notice ==
 

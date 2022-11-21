@@ -21,10 +21,17 @@ class Settings{
      * 
      */
     public function __construct() {
-		
-		//add scripts
+		// execute message from gsc signin
+		if( isset($_GET['page']) ){
+			if( $_GET['page'] == SW_TEXTDOMAIN && isset( $_GET['gsc_connected'] ) ) {
+				\add_option( SW_TEXTDOMAIN . '-gsc-connected', true );
+			}
+		}
+
+		// add scripts
 		\add_action( 'wp_enqueue_scripts', array( $this, 'add_signin_script' ));
 		\wp_enqueue_scripts();
+
         // Add the options page and menu item.
 		\add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
@@ -83,7 +90,7 @@ class Settings{
 		\wp_enqueue_script( 'gsc_signin_script', 
 							plugin_dir_url( __DIR__ . '/../../' ) . 'backend/js/gsc_signin.js',
 							[],
-							'1.6.8',// SW_VERSION,
+							SW_VERSION,
 							true // @footer
 						  );
 	}

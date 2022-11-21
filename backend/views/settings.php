@@ -42,12 +42,19 @@
 
 			cmb2_metabox_form( SW_TEXTDOMAIN . '_options', SW_TEXTDOMAIN . '-settings' );
 			?>
-
-			<?php if( !$gsc_connected && $initialized ):?>
+			<?php if( $initialized ):?>
 				<br />
 				<button 
 				class="button-primary"
 				onClick="open_app_gw('<?php echo SW_SIGNIN_HOST . '/' . $parsed_url['host']; ?>')"
 				>Connect Google Search Console</button>
 			<?php endif;?>
+			<br />
+			<p>
+				<?php if( !$gsc_connected && $initialized ):?>
+						GSC is not connected.
+				<?php elseif( $gsc_connected && $initialized ):?>
+						GSC is connected.
+				<?php endif;?>
+			</p>
 		</div>
