@@ -84,21 +84,29 @@ class Cron{
                 } else if( !isset($body->gsc_connected ) && $gsc_connected ) {
                     \delete_option( SW_TEXTDOMAIN . '-gsc-connected' );
                 }
-                $articles  = $body->articles;
-                $Parsedown = new Parsedown();
+                $articles           = $body->articles;
                 foreach( $articles as $article ) {
+                    $Parsedown          = new Parsedown();
+                    $post_content       = $Parsedown->text( $article->content );
+                    
                     $post_arg = array(
                         'post_type'     => $article->type,
                         'post_status'   => 'publish',
                         'post_title'    => $article->title,
                         'post_category'	=> array( $article->domain_category->term_id ),
-                        'post_content'  => $Parsedown->text( $article->content ),
+                        'post_content'  => $post_content,
                         'post_name'     => \sanitize_title( $article->title ),
                         'post_author'   => \get_option( SW_TEXTDOMAIN . '-user_id' ),
                         'post_date'     => $article->publish_at,
                     );
                     $post_id = \wp_insert_post( $post_arg, true );
                     if( !\is_wp_error($post_id) ) {
+                        $base64ImageToMedia = new Base64ImageToMedia( $post_content, $post_id );
+                        $post_content       = $base64ImageToMedia->html;
+                        \wp_update_post( array(
+                                            'ID'           => $post_id,
+                                            'post_content' => $post_content
+                                        ) );
                         $image_bin        = base64_decode( $article->web_format_image );
                         $upload_dir       = \wp_upload_dir();
                         $upload_path      = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
@@ -137,7 +145,10 @@ class Cron{
                         $thumbnail   = \set_post_thumbnail( $post_id, $attach_id );
                         // Send update to SoMe Captions API
                         $epoint      = '/api/wpclient/published/' . $article->id;
-                        $form_params = array( 'url' => \get_permalink( $post_id ) );
+                        $form_params = array('url' => \get_permalink( $post_id ));
+                        if( !empty( $base64ImageToMedia->sources ) ) {
+                            $form_params['sources'] = $base64ImageToMedia->sources;
+                        }
                         ApiClient::request( $epoint, $form_params );
                     }
 
