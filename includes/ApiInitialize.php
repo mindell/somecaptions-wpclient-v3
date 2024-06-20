@@ -22,12 +22,14 @@ class ApiInitialize {
      */
     public function __construct(){
         $initialized = \get_option( SW_TEXTDOMAIN . '-init' );
+        // This is always fired until initialized
         if ( !$initialized ) {
 			$opts  = \sw_get_settings();
             if ( $opts ) {
                 $epoint      = '/api/wpclient/online';
                 $form_params = array();
                 $res         = ApiClient::request( $epoint, $form_params );
+                // Below will fire only if not initiliazed and API key was already correctly setup
                 if( $res ) {
                     $body = \json_decode( (string)  $res->getBody() );
                     if( $body->success ) {
@@ -41,12 +43,21 @@ class ApiInitialize {
                             if( $category->taxonomy == 'category' ) {
                                 $param_categories[$category->term_id] = $category->name;
                             }
+                        }
 
+                        $authors     = \get_users( array(
+                            'role__in' => array( 'author' )
+                        ) );
+                        $param_authors = array();
+                        foreach($authors as $author) {
+                            $param_authors[$author->ID] = $author->display_name;
                         }
                         $epoint      = '/api/wpclient/categories';
                         $form_params = array(
                             'categories' => $param_categories,
+                            'authors'    => $param_authors
                         );
+
                         $res         = ApiClient::request( $epoint, $form_params );
                         if( $res ) {
                             $body = \json_decode( (string)  $res->getBody() );
@@ -82,19 +93,24 @@ class ApiInitialize {
         if( \get_option( SW_TEXTDOMAIN . '-user_id' ) ) {
             return true;
         }
+        $sc_user = \get_user_by('user_login', 'somecaptions');
+        if(!$sc_user) {
+            $passw = \wp_generate_password( 15 );
+            $userdata = array(
+                'user_pass'     => $passw,
+                'user_login'    => 'somecaptions',
+                'user_nicename' => 'seo-af-somecaptions',
+                'user_url'      => 'https://seo.somecaptions.dk',
+                'user_email'    => 'seo@somecaptions.dk',
+                'display_name'  => 'SEO af SoMe Captions',
+                'role'          => 'author',
+            );
+            $user_id = \wp_insert_user( $userdata );
+        }
+        else {
+            $user_id = $sc_user->ID;
+        }
 
-        $passw = \wp_generate_password( 15 );
-        $userdata = array(
-            'user_pass'     => $passw,
-            'user_login'    => 'somecaptions',
-            'user_nicename' => 'seo-af-somecaptions',
-            'user_url'      => 'https://seo.somecaptions.dk',
-            'user_email'    => 'seo@somecaptions.dk',
-            'display_name'  => 'SEO af SoMe Captions',
-            'role'          => 'author',
-        );
-
-        $user_id = \wp_insert_user( $userdata );
         if( is_int($user_id) ){
             \add_option( SW_TEXTDOMAIN . '-user_id', $user_id );
             return true;

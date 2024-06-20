@@ -150,6 +150,10 @@ class ActDeact{
 		if( $gsc_connected ) {
 			\delete_option( SW_TEXTDOMAIN . '-gsc-connected' );
 		}
+		$user_id = \get_option( SW_TEXTDOMAIN . '-user_id' );
+		if( $user_id ) {
+			\delete_option( SW_TEXTDOMAIN . '-user_id' );
+		}
 		
 		// Clear the permalinks
 		\flush_rewrite_rules();

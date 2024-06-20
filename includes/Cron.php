@@ -88,7 +88,12 @@ class Cron{
                 foreach( $articles as $article ) {
                     $Parsedown          = new Parsedown();
                     $post_content       = $Parsedown->text( $article->content );
-                    
+                    $author_user_id     = \get_option( SW_TEXTDOMAIN . '-user_id' );
+                    if(isset($article->author)) { // legacy support
+                        if($article->author) {
+                            $author_user_id = $article->author->wp_user_id;
+                        }
+                    }
                     $post_arg = array(
                         'post_type'     => $article->type,
                         'post_status'   => 'publish',
@@ -96,7 +101,7 @@ class Cron{
                         'post_category'	=> array( $article->domain_category->term_id ),
                         'post_content'  => $post_content,
                         'post_name'     => \sanitize_title( $article->title ),
-                        'post_author'   => \get_option( SW_TEXTDOMAIN . '-user_id' ),
+                        'post_author'   => $author_user_id,
                         'post_date'     => $article->publish_at,
                     );
                     $post_id = \wp_insert_post( $post_arg, true );
