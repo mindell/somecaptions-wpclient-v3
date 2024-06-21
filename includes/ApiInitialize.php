@@ -93,7 +93,7 @@ class ApiInitialize {
         if( \get_option( SW_TEXTDOMAIN . '-user_id' ) ) {
             return true;
         }
-        $sc_user = \get_user_by('user_login', 'somecaptions');
+        $sc_user = \get_user_by('login', 'somecaptions');
         if(!$sc_user) {
             $passw = \wp_generate_password( 15 );
             $userdata = array(
