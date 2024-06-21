@@ -26,7 +26,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'We\'re sorry, but you can not directly access this file.' );
 }
 
-define( 'SW_VERSION', '2.1.6' );
+define( 'SW_VERSION', '2.2.0' );
 define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
 define( 'SW_NAME', 'SoMe Captions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
