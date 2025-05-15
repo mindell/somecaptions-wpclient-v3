@@ -115,6 +115,8 @@ if ( ! wp_installing() ) {
 				new \SomeCaptions_WPClient\Includes\Settings();
 				new \SomeCaptions_WPClient\Includes\ApiInitialize();
 				new \SomeCaptions_WPClient\Includes\Actions();
+				// Initialize domain verification functionality
+				new \SomeCaptions_WPClient\Includes\DomainVerification();
 			}
 			if(!defined('DISABLE_WP_CRON')){
 				define('DISABLE_WP_CRON',true);

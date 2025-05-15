@@ -128,6 +128,15 @@ class ActDeact{
 	 */
 	private static function single_activate() {
 		self::upgrade_procedure();
+		
+		// Activate domain with SomeCaptions API
+		$form_params = array(
+			'site_name' => \get_bloginfo('name'),
+			'site_url'  => \site_url()
+		);
+		$ep = '/api/wpclient/online';
+		ApiClient::request($ep, $form_params);
+		
 		// Clear the permalinks
 		\flush_rewrite_rules();
 	}
@@ -146,6 +155,10 @@ class ActDeact{
 		ApiClient::request( $ep, $form_params );
 		\delete_option( SW_TEXTDOMAIN . '-init' );
         \delete_option( SW_TEXTDOMAIN . '-settings' );
+		
+		// Delete domain verification status
+		\delete_option( SW_TEXTDOMAIN . '-domain-verified' );
+		
 		$gsc_connected = \get_option( SW_TEXTDOMAIN . '-gsc-connected' );
 		if( $gsc_connected ) {
 			\delete_option( SW_TEXTDOMAIN . '-gsc-connected' );

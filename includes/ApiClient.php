@@ -65,37 +65,67 @@ class ApiClient{
 	public static function request( $ep, $form_params) {
 		$client = self::client();
 		$opts   = \sw_get_settings();
-		$auth   = 'Bearer '.$opts['api_key'];
+		$api_key = $opts['api_key'];
+		
+		// Debug log
+		\error_log('SomeCaptions API Request - Endpoint: ' . $ep);
+		\error_log('SomeCaptions API Request - API Key: ' . $api_key);
+		\error_log('SomeCaptions API Request - Form Params: ' . print_r($form_params, true));
+		
 		$res    = null;
 		try{
-			$res = $client->request( 'POST', $ep, array(
-				'form_params' => $form_params,
-				'headers'     => array(
+			// Ensure we're sending form data properly
+			$request_options = array(
+				'headers' => array(
 					'Accept'         => 'application/json',
-					'Authorization'  => $auth,
+					'Authorization'  => 'Bearer ' . $api_key,
 					'Origin'         => site_url(),
 				),
-			) );
+			);
+			
+			// Only add form_params if we have data to send
+			if (!empty($form_params)) {
+				$request_options['form_params'] = $form_params;
+			}
+			
+			\error_log('SomeCaptions API Request - Options: ' . print_r($request_options, true));
+			
+			$res = $client->request('POST', $ep, $request_options);
+			
+			// Debug response
+			\error_log('SomeCaptions API Response - Status: ' . $res->getStatusCode());
+			\error_log('SomeCaptions API Response - Body: ' . $res->getBody());
+			
 		}catch(BadResponseException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - BadResponseException: ' . $e->getMessage());
 		}catch(ClientException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - ClientException: ' . $e->getMessage());
 		}catch(ConnectException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - ConnectException: ' . $e->getMessage());
 		}catch(GuzzleException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - GuzzleException: ' . $e->getMessage());
 		}catch(InvalidArgumentException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - InvalidArgumentException: ' . $e->getMessage());
 		}catch(RequestException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - RequestException: ' . $e->getMessage());
 		}catch(ServerException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - ServerException: ' . $e->getMessage());
 		}catch(TooManyRedirectsException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - TooManyRedirectsException: ' . $e->getMessage());
 		}catch(TransferException $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - TransferException: ' . $e->getMessage());
 		}catch(Exception $e){
 			self::_error( $e->getMessage() );
+			\error_log('SomeCaptions API Error - Exception: ' . $e->getMessage());
 		}
 		return $res;
 	}
