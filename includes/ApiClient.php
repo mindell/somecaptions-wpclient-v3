@@ -80,12 +80,26 @@ class ApiClient{
 					'Accept'         => 'application/json',
 					'Authorization'  => 'Bearer ' . $api_key,
 					'Origin'         => site_url(),
+					'Content-Type'   => 'application/json',
 				),
 			);
 			
-			// Only add form_params if we have data to send
+			// Only add json data if we have data to send
 			if (!empty($form_params)) {
-				$request_options['form_params'] = $form_params;
+				// Debug the params before sending
+				\error_log('SomeCaptions API Request - Params Before: ' . print_r($form_params, true));
+				
+				// Ensure all values are properly encoded and non-empty
+				foreach ($form_params as $key => $value) {
+					// Convert any null or false values to empty strings
+					if ($value === null || $value === false) {
+						$form_params[$key] = '';
+					}
+				}
+				
+				\error_log('SomeCaptions API Request - Params After: ' . print_r($form_params, true));
+				// Send as JSON body instead of form params
+				$request_options['json'] = $form_params;
 			}
 			
 			\error_log('SomeCaptions API Request - Options: ' . print_r($request_options, true));

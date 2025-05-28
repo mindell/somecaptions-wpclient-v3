@@ -129,13 +129,25 @@ class ActDeact{
 	private static function single_activate() {
 		self::upgrade_procedure();
 		
-		// Activate domain with SomeCaptions API
+		// Initial activation with SomeCaptions API
+		// We'll attempt to send basic info now, but the full site info will be sent later
+		// when the admin page loads via the Actions class
+		\error_log('SomeCaptions Activation - Initial activation, site info will be sent when admin loads');
+		
+		// Reset the site-info-sent flag so it will be sent again when admin loads
+		\delete_option( SW_TEXTDOMAIN . '-site-info-sent' );
+		
+		
+		// Send initial activation request
+		// The complete site info will be sent later when admin_init runs
 		$form_params = array(
-			'site_name' => \get_bloginfo('name'),
-			'site_url'  => \site_url()
+			'site_name' => '',
+			'site_url'  => ''
 		);
 		$ep = '/api/wpclient/online';
 		ApiClient::request($ep, $form_params);
+		
+		\error_log('SomeCaptions Activation - Initial activation complete, full site info will be sent when admin loads');
 		
 		// Clear the permalinks
 		\flush_rewrite_rules();

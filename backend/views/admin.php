@@ -21,7 +21,6 @@
 	// Get settings and status
 	$api_key = cmb2_get_option(SW_TEXTDOMAIN . '-settings', 'api_key', '');
 	$domain_verified = get_option(SW_TEXTDOMAIN . '-domain-verified', false);
-	$gsc_connected = get_option(SW_TEXTDOMAIN . '-gsc-connected');
 	$initialized = get_option(SW_TEXTDOMAIN . '-init');
 	?>
 
@@ -30,9 +29,6 @@
 		<a href="#general-settings" class="nav-tab nav-tab-active">General Settings</a>
 		<?php if (!empty($api_key)): ?>
 		<a href="#domain-verification" class="nav-tab">Domain Verification</a>
-		<?php endif; ?>
-		<?php if ($initialized): ?>
-		<a href="#google-search-console" class="nav-tab">Google Search Console</a>
 		<?php endif; ?>
 	</h2>
 
@@ -46,13 +42,6 @@
 		<?php if (!empty($api_key)): ?>
 		<div id="domain-verification" class="tab-pane">
 			<?php require_once plugin_dir_path( __FILE__ ) . 'settings-domain.php'; ?>
-		</div>
-		<?php endif; ?>
-
-		<!-- Google Search Console Tab -->
-		<?php if ($initialized): ?>
-		<div id="google-search-console" class="tab-pane">
-			<?php require_once plugin_dir_path( __FILE__ ) . 'settings-gsc.php'; ?>
 		</div>
 		<?php endif; ?>
 	</div>

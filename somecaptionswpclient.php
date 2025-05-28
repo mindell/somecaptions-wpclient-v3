@@ -10,7 +10,7 @@
  * Plugin Name:     SoMeCaptions WPClient
  * Plugin URI:      https://github.com/mindell/somecaptions-wpclient
  * Description:     WP plugin for somecaptions.dk
- * Version:         2.2.1
+ * Version:         3.0.1
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
  * Text Domain:     somecaptionswpclient
@@ -26,7 +26,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'We\'re sorry, but you can not directly access this file.' );
 }
 
-define( 'SW_VERSION', '2.2.1' );
+define( 'SW_VERSION', '3.0.1' );
 define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
 define( 'SW_NAME', 'SoMe Captions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
@@ -118,9 +118,9 @@ if ( ! wp_installing() ) {
 				// Initialize domain verification functionality
 				new \SomeCaptions_WPClient\Includes\DomainVerification();
 			}
-			if(!defined('DISABLE_WP_CRON')){
-				define('DISABLE_WP_CRON',true);
-			}
+			//if(!defined('DISABLE_WP_CRON')){
+			//	define('DISABLE_WP_CRON',true);
+			//}
 			new \SomeCaptions_WPClient\Includes\Cron();
 		}
 	);

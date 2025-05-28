@@ -116,7 +116,14 @@ class Cron{
                                             'ID'           => $post_id,
                                             'post_content' => $post_content
                                         ) );
-                        $image_bin        = base64_decode( $article->web_format_image );
+                        // Check if the base64 string contains a mime type prefix and trim it if needed
+                        $base64_image = $article->web_format_image;
+                        // Check for data URI format (e.g., "data:image/jpeg;base64,")
+                        if (preg_match('/^data:image\/[\w+]+;base64,/', $base64_image)) {
+                            // Remove the mime type prefix
+                            $base64_image = preg_replace('/^data:image\/[\w+]+;base64,/', '', $base64_image);
+                        }
+                        $image_bin = base64_decode($base64_image);
                         $upload_dir       = \wp_upload_dir();
                         $upload_path      = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
                         $image_name       = \sanitize_title( $article->title ) . '.jpg';

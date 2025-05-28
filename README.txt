@@ -3,8 +3,8 @@ Contributors: (this should be a list of wordpress.org userid's)
 Donate link: http://example.com/
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
-Tested up to: 6.0
-Stable tag: 2.2.1
+Tested up to: 6.3
+Stable tag: 3.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP: 7.4
@@ -129,6 +129,16 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 = 2.2.1 =
 * Allow custom URL
+
+= 3.0.0 =
+* Added support for featured images
+* Improved content formatting
+* Enhanced error handling
+
+= 3.0.1 =
+* Added support for article types (post/page)
+* Improved featured image handling with auto-resizing
+* Enhanced integration with SoMe Captions dashboard
 
 == Upgrade Notice ==
 

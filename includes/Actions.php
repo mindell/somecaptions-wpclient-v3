@@ -27,6 +27,13 @@ class Actions {
 			\add_action( 'add_user_role',    array( & $this, 'somecaptions_new_user_role' ),     10, 1 );
 			\add_action( 'remove_user_role', array( & $this, 'somecaptions_removed_user_role' ), 10, 1 );
 			\add_action( 'deleted_user',     array( & $this, 'somecaptions_deleted_user' ),      10, 1 );
+			
+			// Add action to send site info after admin is fully loaded
+			\add_action( 'admin_init', array( & $this, 'maybe_send_site_info' ), 20 );
+			
+			// Add action to update site info when site title changes
+			\add_action( 'update_option_blogname', array( & $this, 'update_site_info' ), 10, 0 );
+			\add_action( 'update_option_siteurl', array( & $this, 'update_site_info' ), 10, 0 );
 		}
 	}
     
@@ -138,6 +145,85 @@ class Actions {
 		);
 		$ep = '/api/wpclient/remove_category';
 		ApiClient::request( $ep, $form_params );
+	}
+
+	/**
+	 * Check if site info has been sent and send it if not
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	public function maybe_send_site_info() {
+		// Only run this once or when forced
+		$site_info_sent = \get_option( SW_TEXTDOMAIN . '-site-info-sent', false );
+		
+		if (!$site_info_sent) {
+			\error_log('SomeCaptions - Sending site info for the first time');
+			$this->send_site_info();
+			
+			// Mark as sent so we don't do it again unless site info changes
+			\update_option( SW_TEXTDOMAIN . '-site-info-sent', true );
+		}
+	}
+
+	/**
+	 * Update site info when site title or URL changes
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	public function update_site_info() {
+		\error_log('SomeCaptions - Site info changed, updating');
+		$this->send_site_info();
+	}
+
+	/**
+	 * Send site info to the API
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	private function send_site_info() {
+		// Get site info
+		$site_name = \get_bloginfo('name');
+		
+		// If site name is empty, try alternative methods
+		if (empty($site_name)) {
+			\error_log('SomeCaptions - Site Name is empty, trying alternative methods');
+			$site_name = \get_option('blogname');
+			\error_log('SomeCaptions - Site Name from option: ' . $site_name);
+			
+			// If still empty, use the domain name as a fallback
+			if (empty($site_name)) {
+				$parsed_url = parse_url(\site_url());
+				$site_name = isset($parsed_url['host']) ? $parsed_url['host'] : 'WordPress Site';
+				\error_log('SomeCaptions - Using domain as site name: ' . $site_name);
+			}
+		}
+		
+		$site_url = \site_url();
+		
+		// Log the values for debugging
+		\error_log('SomeCaptions - Sending Site Name: ' . $site_name);
+		\error_log('SomeCaptions - Sending Site URL: ' . $site_url);
+		
+		// Only send if we have values
+		if (!empty($site_name) && !empty($site_url)) {
+			$form_params = array(
+				'site_name' => $site_name,
+				'site_url'  => $site_url
+			);
+			$ep = '/api/wpclient/online';
+			$response = ApiClient::request($ep, $form_params);
+			
+			\error_log('SomeCaptions - Site info sent response: ' . print_r($response, true));
+			return $response;
+		}
+		
+		return false;
 	}
 
 }
