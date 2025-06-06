@@ -24,8 +24,8 @@ class ComposerStaticInit7d978cfe5bcde41d5ff17592451e32aa
         ),
         'S' => 
         array (
-            'SomeCaptions_WPClient\\Includes\\' => 31,
-            'SomeCaptions_WPClient\\Engine\\' => 29,
+            'SoMeCaptions_WPClient\\Includes\\' => 31,
+            'SoMeCaptions_WPClient\\Engine\\' => 29,
         ),
         'P' => 
         array (
@@ -58,11 +58,11 @@ class ComposerStaticInit7d978cfe5bcde41d5ff17592451e32aa
         array (
             0 => __DIR__ . '/..' . '/wpdesk/wp-notice/src/WPDesk/Notice',
         ),
-        'SomeCaptions_WPClient\\Includes\\' => 
+        'SoMeCaptions_WPClient\\Includes\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
         ),
-        'SomeCaptions_WPClient\\Engine\\' => 
+        'SoMeCaptions_WPClient\\Engine\\' => 
         array (
             0 => __DIR__ . '/../..' . '/engine',
         ),

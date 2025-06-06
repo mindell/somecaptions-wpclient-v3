@@ -8,8 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'WPDesk\\PluginBuilder\\' => array($vendorDir . '/wpdesk/wp-builder/src'),
     'WPDesk\\Notice\\' => array($vendorDir . '/wpdesk/wp-notice/src/WPDesk/Notice'),
-    'SomeCaptions_WPClient\\Includes\\' => array($baseDir . '/includes'),
-    'SomeCaptions_WPClient\\Engine\\' => array($baseDir . '/engine'),
+    'SoMeCaptions_WPClient\\Includes\\' => array($baseDir . '/includes'),
+    'SoMeCaptions_WPClient\\Engine\\' => array($baseDir . '/engine'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
     'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Micropackage\\Requirements\\' => array($vendorDir . '/micropackage/requirements/src'),

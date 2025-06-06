@@ -5,7 +5,7 @@
  * This includes the header, options, and other information that should provide
  * The User Interface to the end user.
  *
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright N/A
  * @license   GPL 2.0+
@@ -19,9 +19,9 @@
 
 	<?php
 	// Get settings and status
-	$api_key = cmb2_get_option(SW_TEXTDOMAIN . '-settings', 'api_key', '');
-	$domain_verified = get_option(SW_TEXTDOMAIN . '-domain-verified', false);
-	$initialized = get_option(SW_TEXTDOMAIN . '-init');
+	$api_key = cmb2_get_option('somecaptions-wpclient' . '-settings', 'api_key', '');
+	$domain_verified = get_option('somecaptions-wpclient' . '-domain-verified', false);
+	$initialized = get_option('somecaptions-wpclient' . '-init');
 	?>
 
 	<!-- Add tab navigation -->
@@ -46,15 +46,15 @@
 		<?php endif; ?>
 	</div>
 
-	<!-- Add tab switching JavaScript -->
+	<!-- Add improved tab switching JavaScript -->
 	<script>
 	jQuery(document).ready(function($) {
 		// Show the first tab by default
 		$('.tab-pane').hide();
 		$('.tab-pane.active').show();
 
-		// Handle tab clicks
-		$('.nav-tab').on('click', function(e) {
+		// Handle tab clicks with improved animation
+		$(document).on('click', '.nav-tab', function(e) {
 			e.preventDefault();
 			var target = $(this).attr('href');
 
@@ -62,14 +62,29 @@
 			$('.nav-tab').removeClass('nav-tab-active');
 			$(this).addClass('nav-tab-active');
 
-			// Show the selected tab content
+			// Show the selected tab content with fade effect
 			$('.tab-pane').hide();
-			$(target).show();
+			$(target).fadeIn(300);
+			
+			// Save the active tab in session storage
+			sessionStorage.setItem('somecaptions_active_tab', target);
+		});
+		
+		// Restore active tab from session storage if available
+		var activeTab = sessionStorage.getItem('somecaptions_active_tab');
+		if (activeTab && $(activeTab).length) {
+			$('.nav-tab[href="' + activeTab + '"]').trigger('click');
+		}
+		
+		// Listen for the custom event when domain tab is loaded
+		$(document).on('somecaptions_domain_tab_loaded', function() {
+			// Re-initialize any scripts that might be needed for the domain tab
+			console.log('Domain tab loaded and initialized');
 		});
 	});
 	</script>
 
-	<!-- Add tab styling -->
+	<!-- Add enhanced tab styling -->
 	<style>
 	.tab-content {
 		padding: 20px 0;
@@ -79,6 +94,19 @@
 	}
 	.tab-pane.active {
 		display: block;
+	}
+	.nav-tab {
+		transition: background-color 0.3s ease;
+	}
+	.nav-tab:hover {
+		background-color: #f0f0f1;
+	}
+	.nav-tab-active {
+		border-bottom: 1px solid #f0f0f1;
+		background: #f0f0f1;
+	}
+	.settings-updated {
+		margin-top: 15px;
 	}
 	</style>
 

@@ -10,7 +10,7 @@
  * @copyright 2022 GPL
  */
  
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 class Settings{
 
@@ -25,7 +25,7 @@ class Settings{
 		\add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
 		$realpath        = (string) \realpath( \dirname( __FILE__ ) );
-		$plugin_basename = \plugin_basename( \plugin_dir_path( $realpath ) . SW_TEXTDOMAIN . '.php' );
+		$plugin_basename = \plugin_basename( \plugin_dir_path( $realpath ) . 'somecaptions-wpclient' . '.php' );
 		\add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
     }
 
@@ -40,7 +40,7 @@ class Settings{
 		 * Add a settings page for this plugin to the main menu
 		 *
 		 */
-		\add_menu_page( \__( 'SoMe Captions WPClient Settings', SW_TEXTDOMAIN ), SW_NAME, 'manage_options', SW_TEXTDOMAIN, array( $this, 'display_plugin_admin_page' ), 'dashicons-hammer', 90 );
+		\add_menu_page( \__( 'SoMe Captions WPClient Settings', 'somecaptions-wpclient' ), SW_NAME, 'manage_options', 'somecaptions-wpclient', array( $this, 'display_plugin_admin_page' ), 'dashicons-hammer', 90 );
 	}
 
     /**
@@ -63,7 +63,7 @@ class Settings{
 	public function add_action_links( array $links ) {
 		return \array_merge(
 			array(
-				'settings' => '<a href="' . \admin_url( 'options-general.php?page=' . SW_TEXTDOMAIN ) . '">' . \__( 'Settings', SW_TEXTDOMAIN ) . '</a>',
+				'settings' => '<a href="' . \admin_url( 'options-general.php?page=' . 'somecaptions-wpclient' ) . '">' . \__( 'Settings', 'somecaptions-wpclient' ) . '</a>',
 			),
 			$links
 		);

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * SomeCaptions_WPClient
+ * SoMeCaptions_WPClient
  *
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright N/A
  * @license   GPL 2.0+
  * @link      https://github.com/mindell/
  */
 
-namespace SomeCaptions_WPClient\Engine;
+namespace SoMeCaptions_WPClient\Engine;
 
 /**
  * Base skeleton of the plugin

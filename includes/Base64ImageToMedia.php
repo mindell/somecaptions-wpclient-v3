@@ -10,7 +10,7 @@
  * @copyright 2022 GPL
  */
  
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 class Base64ImageToMedia {
     /**

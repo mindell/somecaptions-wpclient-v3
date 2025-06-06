@@ -10,7 +10,7 @@
  * @copyright 2022 GPL
  */
 
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
@@ -52,6 +52,17 @@ class ApiClient{
 		}
 		return self::$client;
 	}
+	
+	/**
+	 * Reset the API client to force it to reload settings
+	 * 
+	 * @since 3.0.2
+	 * 
+	 * @return void
+	 */
+	public static function reset() {
+		self::$client = null;
+	}
 
 	/**
 	 * Generic private function for making a POST request
@@ -67,10 +78,12 @@ class ApiClient{
 		$opts   = \sw_get_settings();
 		$api_key = $opts['api_key'];
 		
-		// Debug log
-		\error_log('SomeCaptions API Request - Endpoint: ' . $ep);
-		\error_log('SomeCaptions API Request - API Key: ' . $api_key);
-		\error_log('SomeCaptions API Request - Form Params: ' . print_r($form_params, true));
+		// Debug log only in development mode
+		if (defined('WP_DEBUG') && WP_DEBUG) {
+			// \error_log('SomeCaptions API Request - Endpoint: ' . $ep);
+			// \error_log('SomeCaptions API Request - API Key: ' . $api_key);
+			// \error_log('SomeCaptions API Request - Form Params: ' . print_r($form_params, true));
+		}
 		
 		$res    = null;
 		try{
@@ -83,11 +96,21 @@ class ApiClient{
 					'Content-Type'   => 'application/json',
 				),
 			);
-			
+			if (!is_array($form_params)) {
+				$form_params = [];
+			}
 			// Only add json data if we have data to send
 			if (!empty($form_params)) {
 				// Debug the params before sending
-				\error_log('SomeCaptions API Request - Params Before: ' . print_r($form_params, true));
+				if (defined('WP_DEBUG') && WP_DEBUG) {
+					// Create a copy of form params for logging to redact sensitive information
+					$log_params = $form_params;
+					// Redact sensitive information
+					if (isset($log_params['api_key'])) {
+						$log_params['api_key'] = '***REDACTED***';
+					}
+					// \error_log('SomeCaptions API Request - Params Before: ' . print_r($log_params, true));
+				}
 				
 				// Ensure all values are properly encoded and non-empty
 				foreach ($form_params as $key => $value) {
@@ -97,49 +120,91 @@ class ApiClient{
 					}
 				}
 				
-				\error_log('SomeCaptions API Request - Params After: ' . print_r($form_params, true));
+				if (defined('WP_DEBUG') && WP_DEBUG) {
+					// Create a copy of form params for logging to redact sensitive information
+					$log_params = $form_params;
+					// Redact sensitive information
+					if (isset($log_params['api_key'])) {
+						$log_params['api_key'] = '***REDACTED***';
+					}
+					// \error_log('SomeCaptions API Request - Params After: ' . print_r($log_params, true));
+				}
 				// Send as JSON body instead of form params
 				$request_options['json'] = $form_params;
 			}
 			
-			\error_log('SomeCaptions API Request - Options: ' . print_r($request_options, true));
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// Create a copy of request options for logging to redact sensitive information
+				$log_options = $request_options;
+				// Redact sensitive information in headers
+				if (isset($log_options['headers']) && isset($log_options['headers']['Authorization'])) {
+					$log_options['headers']['Authorization'] = '***REDACTED***';
+				}
+				// Redact sensitive information in JSON body
+				if (isset($log_options['json']) && isset($log_options['json']['api_key'])) {
+					$log_options['json']['api_key'] = '***REDACTED***';
+				}
+				// \error_log('SomeCaptions API Request - Options: ' . print_r($log_options, true));
+			}
 			
 			$res = $client->request('POST', $ep, $request_options);
 			
-			// Debug response
-			\error_log('SomeCaptions API Response - Status: ' . $res->getStatusCode());
-			\error_log('SomeCaptions API Response - Body: ' . $res->getBody());
+			// Debug response only in development mode
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SomeCaptions API Response - Status: ' . $res->getStatusCode());
+				// \error_log('SomeCaptions API Response - Body: ' . $res->getBody());
+			}
 			
-		}catch(BadResponseException $e){
+		}catch(\GuzzleHttp\Exception\BadResponseException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - BadResponseException: ' . $e->getMessage());
-		}catch(ClientException $e){
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - BadResponseException: ' . $e->getMessage());
+			}
+		}catch(\GuzzleHttp\Exception\ClientException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - ClientException: ' . $e->getMessage());
-		}catch(ConnectException $e){
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - ClientException: ' . $e->getMessage());
+			}
+		}catch(\GuzzleHttp\Exception\ConnectException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - ConnectException: ' . $e->getMessage());
-		}catch(GuzzleException $e){
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - ConnectException: ' . $e->getMessage());
+			}
+		}catch(\GuzzleHttp\Exception\GuzzleException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - GuzzleException: ' . $e->getMessage());
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - GuzzleException: ' . $e->getMessage());
+			}
 		}catch(InvalidArgumentException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - InvalidArgumentException: ' . $e->getMessage());
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - InvalidArgumentException: ' . $e->getMessage());
+			}
 		}catch(RequestException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - RequestException: ' . $e->getMessage());
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - RequestException: ' . $e->getMessage());
+			}
 		}catch(ServerException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - ServerException: ' . $e->getMessage());
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - ServerException: ' . $e->getMessage());
+			}
 		}catch(TooManyRedirectsException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - TooManyRedirectsException: ' . $e->getMessage());
-		}catch(TransferException $e){
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - TooManyRedirectsException: ' . $e->getMessage());
+			}
+		}catch(\GuzzleHttp\Exception\TransferException $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - TransferException: ' . $e->getMessage());
-		}catch(Exception $e){
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - TransferException: ' . $e->getMessage());
+			}
+		}catch(\Exception $e){
 			self::_error( $e->getMessage() );
-			\error_log('SomeCaptions API Error - Exception: ' . $e->getMessage());
+			if (defined('WP_DEBUG') && WP_DEBUG) { 
+				// \error_log('SomeCaptions API Error - Exception: ' . $e->getMessage());
+			}
 		}
 		return $res;
 	}
@@ -156,8 +221,8 @@ class ApiClient{
 	protected static function _error($message) {
 		global $pagenow;
 		if ( isset( $_GET['page'] ) ) {
-			if ( $_GET['page'] == SW_TEXTDOMAIN && $pagenow == 'admin.php' ) {
-				\wpdesk_wp_notice( SW_TEXTDOMAIN . ': ' .$message, 'error', true );
+			if ( $_GET['page'] == 'somecaptions-wpclient' && $pagenow == 'admin.php' ) {
+				\wpdesk_wp_notice( 'somecaptions-wpclient' . ': ' .$message, 'error', true );
 			}
 
 		}

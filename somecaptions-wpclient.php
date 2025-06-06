@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright 2022 GPL
  * @license   GPL 2.0+
@@ -13,7 +13,7 @@
  * Version:         3.0.1
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
- * Text Domain:     somecaptionswpclient
+ * Text Domain:     somecaptions-wpclient
  * License:         GPL 2.0+
  * License URI:     http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path:     /languages
@@ -27,7 +27,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 define( 'SW_VERSION', '3.0.1' );
-define( 'SW_TEXTDOMAIN', 'somecaptionswpclient' );
+define( 'SW_TEXTDOMAIN', 'somecaptions-wpclient' );
 define( 'SW_NAME', 'SoMe Captions WPClient' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
 define( 'SW_PLUGIN_ABSOLUTE', __FILE__ );
@@ -39,11 +39,11 @@ define( 'SW_SIGNIN_HOST', 'https://app1.somecaptions.dk/gsc_signin' );
 add_action(
 	'init',
 	static function () {
-		load_plugin_textdomain( SW_TEXTDOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( 'somecaptions-wpclient', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 	);
 
-if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<=' ) ) {
+if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<' ) ) {
 	add_action(
 		'admin_init',
 		static function() {
@@ -56,8 +56,33 @@ if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<=' ) ) {
 			echo wp_kses_post(
 			sprintf(
 				'<div class="notice notice-error"><p>%s</p></div>',
-				__( '"SoMe Captions WPClient" requires PHP ' . SW_MIN_PHP_VERSION . ' or newer.', SW_TEXTDOMAIN )
+				sprintf( __( '%1$s requires PHP %2$s or newer.', 'somecaptions-wpclient' ), 'SoMe Captions WPClient', SW_MIN_PHP_VERSION )
 			)
+			);
+		}
+	);
+
+	// Return early to prevent loading the plugin.
+	return;
+}
+
+// Check WordPress version
+global $wp_version;
+if ( version_compare( $wp_version, SW_WP_VERSION, '<' ) ) {
+	add_action(
+		'admin_init',
+		static function() {
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
+	);
+	add_action(
+		'admin_notices',
+		static function() {
+			echo wp_kses_post(
+				sprintf(
+					'<div class="notice notice-error"><p>%s</p></div>',
+					sprintf( __( '%1$s requires WordPress %2$s or newer.', 'somecaptions-wpclient' ), 'SoMe Captions WPClient', SW_WP_VERSION )
+				)
 			);
 		}
 	);
@@ -69,7 +94,7 @@ if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<=' ) ) {
 $somecaptionswpclient_libraries = require SW_PLUGIN_ROOT . 'vendor/autoload.php'; //phpcs:ignore
 
 function sw_get_settings() {
-	$opts =  apply_filters( 'sw_get_settings', get_option( SW_TEXTDOMAIN . '-settings' ) );
+	$opts =  apply_filters( 'sw_get_settings', get_option( 'somecaptions-wpclient' . '-settings' ) );
 	//  set a default value
 	if( !$opts ) {
 		$opts = array(
@@ -100,28 +125,28 @@ if ( ! $requirements->satisfied() ) {
 }
 
 // Documentation to integrate GitHub, GitLab or BitBucket https://github.com/YahnisElsts/plugin-update-checker/blob/master/README.md
-$updateChecker = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-wpclient', __FILE__, 'somecaptionswpclient' );
+$updateChecker = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-wpclient', __FILE__, 'somecaptions-wpclient' );
 $updateChecker->getVcsApi()->enableReleaseAssets();
 
 if ( ! wp_installing() ) {
-	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
-	register_deactivation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . SW_TEXTDOMAIN . '.php', array( new \SomeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
+	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-wpclient' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
+	register_deactivation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-wpclient' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
 	add_action(
 		'plugins_loaded',
 		static function () use ( $somecaptionswpclient_libraries ) {
-			new \SomeCaptions_WPClient\Engine\Initialize( $somecaptionswpclient_libraries );
+			new \SoMeCaptions_WPClient\Engine\Initialize( $somecaptionswpclient_libraries );
 			if( is_admin() ) {
 				require_once SW_PLUGIN_ROOT . 'vendor/cmb2/cmb2/init.php';
-				new \SomeCaptions_WPClient\Includes\Settings();
-				new \SomeCaptions_WPClient\Includes\ApiInitialize();
-				new \SomeCaptions_WPClient\Includes\Actions();
+				new \SoMeCaptions_WPClient\Includes\Settings();
+				new \SoMeCaptions_WPClient\Includes\ApiInitialize();
+				new \SoMeCaptions_WPClient\Includes\Actions();
 				// Initialize domain verification functionality
-				new \SomeCaptions_WPClient\Includes\DomainVerification();
+				new \SoMeCaptions_WPClient\Includes\DomainVerification();
 			}
 			//if(!defined('DISABLE_WP_CRON')){
 			//	define('DISABLE_WP_CRON',true);
 			//}
-			new \SomeCaptions_WPClient\Includes\Cron();
+			new \SoMeCaptions_WPClient\Includes\Cron();
 		}
 	);
 }

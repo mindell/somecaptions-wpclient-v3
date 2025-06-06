@@ -10,7 +10,7 @@
  * @copyright 2022 GPL
  */
 
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 class ActDeact{
     /**
@@ -117,7 +117,7 @@ class ActDeact{
 		}
 
 		\update_option( 'somecaptionswpclient-version', SW_VERSION );
-		\delete_option( SW_TEXTDOMAIN . '_fake-meta' );
+		\delete_option( 'somecaptions-wpclient' . '_fake-meta' );
 	}
 
 	/**
@@ -132,10 +132,10 @@ class ActDeact{
 		// Initial activation with SomeCaptions API
 		// We'll attempt to send basic info now, but the full site info will be sent later
 		// when the admin page loads via the Actions class
-		\error_log('SomeCaptions Activation - Initial activation, site info will be sent when admin loads');
+		// \error_log('SomeCaptions Activation - Initial activation, site info will be sent when admin loads');
 		
 		// Reset the site-info-sent flag so it will be sent again when admin loads
-		\delete_option( SW_TEXTDOMAIN . '-site-info-sent' );
+		\delete_option( 'somecaptions-wpclient' . '-site-info-sent' );
 		
 		
 		// Send initial activation request
@@ -147,7 +147,7 @@ class ActDeact{
 		$ep = '/api/wpclient/online';
 		ApiClient::request($ep, $form_params);
 		
-		\error_log('SomeCaptions Activation - Initial activation complete, full site info will be sent when admin loads');
+		// \error_log('SomeCaptions Activation - Initial activation complete, full site info will be sent when admin loads');
 		
 		// Clear the permalinks
 		\flush_rewrite_rules();
@@ -165,19 +165,19 @@ class ActDeact{
 		$form_params = array();
 		$ep          = '/api/wpclient/offline';
 		ApiClient::request( $ep, $form_params );
-		\delete_option( SW_TEXTDOMAIN . '-init' );
-        \delete_option( SW_TEXTDOMAIN . '-settings' );
+		\delete_option( 'somecaptions-wpclient' . '-init' );
+        \delete_option( 'somecaptions-wpclient' . '-settings' );
 		
 		// Delete domain verification status
-		\delete_option( SW_TEXTDOMAIN . '-domain-verified' );
+		\delete_option( 'somecaptions-wpclient' . '-domain-verified' );
 		
-		$gsc_connected = \get_option( SW_TEXTDOMAIN . '-gsc-connected' );
+		$gsc_connected = \get_option( 'somecaptions-wpclient' . '-gsc-connected' );
 		if( $gsc_connected ) {
-			\delete_option( SW_TEXTDOMAIN . '-gsc-connected' );
+			\delete_option( 'somecaptions-wpclient' . '-gsc-connected' );
 		}
-		$user_id = \get_option( SW_TEXTDOMAIN . '-user_id' );
+		$user_id = \get_option( 'somecaptions-wpclient' . '-user_id' );
 		if( $user_id ) {
-			\delete_option( SW_TEXTDOMAIN . '-user_id' );
+			\delete_option( 'somecaptions-wpclient' . '-user_id' );
 		}
 		
 		// Clear the permalinks

@@ -1,34 +1,30 @@
-=== SomeCaptions WPClient ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
+=== SoMeCaptions WPClient ===
+Contributors: mindell
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
-Tested up to: 6.3
+Tested up to: 6.8
 Stable tag: 3.0.1
-License: GPLv3 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License: GPL-2.0+
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Requires PHP: 7.4
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Integrate your WordPress site with SomeCaptions platform for automated content creation and publishing.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+SoMeCaptions WPClient allows you to seamlessly integrate your WordPress site with the SomeCaptions platform. This plugin enables automated content creation, publishing, and management directly from your SomeCaptions dashboard.
 
-Add your new plugin at
-[SomeCaptions](https://github.com/mindell/somecaptions-wpclient)!
+Key features include:
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+* Domain verification for secure integration
+* API key management
+* Automated article publishing
+* Featured image support
+* Content formatting options
+* Support for both posts and pages
+* Enhanced error handling
 
-A few notes about the sections above:
-
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
+For more information, visit [SomeCaptions](https://somecaptions.dk/).
 stable.
 
     Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
@@ -50,7 +46,7 @@ e.g.
 = Using The WordPress Dashboard =
 
 1. Navigate to the 'Add New' in the plugins dashboard
-2. Search for 'somecaptionswpclient'
+2. Search for 'somecaptions-wpclient'
 3. Click 'Install Now'
 4. Activate the plugin on the Plugin dashboard
 
@@ -142,5 +138,5 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Upgrade Notice ==
 
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
+= 3.0.1 =
+This version adds support for article types, improves image handling, and enhances integration with the SomeCaptions dashboard.

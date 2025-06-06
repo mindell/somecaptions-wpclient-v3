@@ -2,7 +2,7 @@
 /**
  * Domain Verification Tab
  *
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright N/A
  * @license   GPL 2.0+
@@ -10,42 +10,42 @@
  */
 
 // Get the verification code from the main settings
-$verification_code = cmb2_get_option(SW_TEXTDOMAIN . '-settings', 'verification_code', '');
+$verification_code = cmb2_get_option('somecaptions-wpclient' . '-settings', 'verification_code', '');
 
 // Create the domain verification CMB2 box
 $domain_cmb = new_cmb2_box(
     array(
-        'id'           => SW_TEXTDOMAIN . '_domain_verification',
+        'id'           => 'somecaptions-wpclient' . '_domain_verification',
         'hookup'       => false,
-        'show_on'      => array('key' => 'options-page', 'value' => array(SW_TEXTDOMAIN)),
+        'show_on'      => array('key' => 'options-page', 'value' => array('somecaptions-wpclient')),
         'show_names'   => true,
         'object_types' => array('options-page'),
-        'option_key'   => SW_TEXTDOMAIN . '-settings', // Use the main settings option key
+        'option_key'   => 'somecaptions-wpclient' . '-settings', // Use the main settings option key
     )
 );
 
 // Domain verification section title
 $domain_cmb->add_field(
     array(
-        'name'    => __('Domain Verification', SW_TEXTDOMAIN),
+        'name'    => __('Domain Verification', 'somecaptions-wpclient'),
         'id'      => 'verification_section',
         'type'    => 'title',
-        'desc'    => __('Verify your domain ownership to enable full integration with SomeCaptions', SW_TEXTDOMAIN),
+        'desc'    => __('Verify your domain ownership to enable full integration with SomeCaptions', 'somecaptions-wpclient'),
     )
 );
 
 // Verification code field
 $domain_cmb->add_field(
     array(
-        'name'    => __('Verification Code', SW_TEXTDOMAIN),
+        'name'    => __('Verification Code', 'somecaptions-wpclient'),
         'id'      => 'verification_code',
         'type'    => 'text',
-        'desc'    => __('Enter the verification code from your SomeCaptions dashboard', SW_TEXTDOMAIN),
+        'desc'    => __('Enter the verification code from your SomeCaptions dashboard', 'somecaptions-wpclient'),
     )
 );
 
 // Get verification status
-$domain_verified = get_option(SW_TEXTDOMAIN . '-domain-verified', false);
+$domain_verified = get_option('somecaptions-wpclient' . '-domain-verified', false);
 $verify_button_html = '<button type="button" id="verify-domain-btn" class="button button-primary">Verify Domain</button>';
 $verify_status_html = '<span id="verification-status" style="margin-left: 10px;">';
 
@@ -104,7 +104,7 @@ $domain_cmb->add_field(
 // Add information about domain verification
 $domain_cmb->add_field(
     array(
-        'name' => __('What is Domain Verification?', SW_TEXTDOMAIN),
+        'name' => __('What is Domain Verification?', 'somecaptions-wpclient'),
         'desc' => __('
             <p>Domain verification confirms that you own this website and allows SomeCaptions to securely connect with your WordPress site.</p>
             <p>After verification, you\'ll be able to:</p>
@@ -113,12 +113,12 @@ $domain_cmb->add_field(
                 <li>Automatically publish generated content</li>
                 <li>Access advanced features like category mapping</li>
             </ul>
-        ', SW_TEXTDOMAIN),
+        ', 'somecaptions-wpclient'),
         'id'   => 'verification_info',
         'type' => 'title',
     )
 );
 
 // Render the form
-cmb2_metabox_form(SW_TEXTDOMAIN . '_domain_verification', SW_TEXTDOMAIN . '-settings');
+cmb2_metabox_form('somecaptions-wpclient' . '_domain_verification', 'somecaptions-wpclient' . '-settings');
 ?>

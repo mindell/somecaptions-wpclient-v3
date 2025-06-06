@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SomeCaptions_WPClient
+ * SoMeCaptions_WPClient
  *
  * Fired when the plugin is uninstalled.
  *
@@ -15,7 +15,7 @@
  * - Repeat with other user roles. Best directly by using the links/query string parameters.
  * - Repeat things for multisite. Once for a single site in the network, once sitewide.
  *
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright N/A
  * @license   GPL 2.0+

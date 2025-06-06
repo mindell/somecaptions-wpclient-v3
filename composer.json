@@ -1,5 +1,5 @@
 {
-    "name": "mindell/somecaptionswpclient",
+    "name": "mindell/somecaptions-wpclient",
     "description": "WordPress plugin for somecaptions.dk",
     "type": "wordpress-plugin",
     "authors": [
@@ -23,8 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "SomeCaptions_WPClient\\Engine\\": "engine\/",
-            "SomeCaptions_WPClient\\Includes\\": "includes\/"
+            "SoMeCaptions_WPClient\\Engine\\": "engine\/",
+            "SoMeCaptions_WPClient\\Includes\\": "includes\/"
         }
     }
 }

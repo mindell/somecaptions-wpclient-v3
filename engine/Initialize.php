@@ -1,21 +1,21 @@
 <?php
 
 /**
- * SomeCaptions_WPClient
+ * SoMeCaptions_WPClient
  *
- * @package   SomeCaptions_WPClient
+ * @package   SoMeCaptions_WPClient
  * @author    Mindell <mindell.zamora@gmail.com>
  * @copyright N/A
  * @license   GPL 2.0+
  * @link      https://github.com/mindell/
  */
 
-namespace SomeCaptions_WPClient\Engine;
+namespace SoMeCaptions_WPClient\Engine;
 
-use SomeCaptions_WPClient\Engine;
+use SoMeCaptions_WPClient\Engine;
 
 /**
- * SomeCaptions_WPClient Initializer
+ * SoMeCaptions_WPClient Initializer
  */
 class Initialize {
 
@@ -89,7 +89,7 @@ class Initialize {
 				\do_action( 'somecaptionswpclient_initialize_failed', $err );
 
 				if ( WP_DEBUG ) {
-					throw new \Exception( $err->getMessage() );
+					throw new \Exception( esc_html($err->getMessage()) );
 				}
 			}
 		}
@@ -105,10 +105,10 @@ class Initialize {
 	private function get_classes( string $namespace ) {
 		$prefix    = $this->composer->getPrefixesPsr4();
 		$classmap  = $this->composer->getClassMap();
-		$namespace = 'SomeCaptions_WPClient\\' . $namespace;
+		$namespace = 'SoMeCaptions_WPClient\\' . $namespace;
 
 		// In case composer has autoload optimized
-		if ( isset( $classmap[ 'SomeCaptions_WPClient\\Engine\\Initialize' ] ) ) {
+		if ( isset( $classmap[ 'SoMeCaptions_WPClient\\Engine\\Initialize' ] ) ) {
 			$classes = \array_keys( $classmap );
 
 			foreach ( $classes as $class ) {

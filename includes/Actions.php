@@ -10,7 +10,7 @@
  * @copyright 2022 GPL
  */
 
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 class Actions {
 
@@ -20,7 +20,7 @@ class Actions {
      * @since 0.0.1
      */
     public function __construct(){
-		$initialized = \get_option( SW_TEXTDOMAIN . '-init' );
+		$initialized = \get_option( 'somecaptions-wpclient' . '-init' );
 		if($initialized) {
 			\add_action( 'create_category',  array( & $this, 'somecaptions_new_category' ),      10, 1 );
 			\add_action( 'delete_category',  array( & $this, 'somecaptions_remove_category' ),   10, 1 );
@@ -35,6 +35,10 @@ class Actions {
 			\add_action( 'update_option_blogname', array( & $this, 'update_site_info' ), 10, 0 );
 			\add_action( 'update_option_siteurl', array( & $this, 'update_site_info' ), 10, 0 );
 		}
+		
+		// Add AJAX handlers for settings improvements
+		\add_action( 'wp_ajax_somecaptions_validate_api', array( $this, 'validate_api_settings' ) );
+		\add_action( 'wp_ajax_somecaptions_load_domain_tab', array( $this, 'load_domain_tab' ) );
 	}
     
 	/**
@@ -156,14 +160,14 @@ class Actions {
 	 */
 	public function maybe_send_site_info() {
 		// Only run this once or when forced
-		$site_info_sent = \get_option( SW_TEXTDOMAIN . '-site-info-sent', false );
+		$site_info_sent = \get_option( 'somecaptions-wpclient' . '-site-info-sent', false );
 		
 		if (!$site_info_sent) {
-			\error_log('SomeCaptions - Sending site info for the first time');
+			// \error_log('SomeCaptions - Sending site info for the first time');
 			$this->send_site_info();
 			
 			// Mark as sent so we don't do it again unless site info changes
-			\update_option( SW_TEXTDOMAIN . '-site-info-sent', true );
+			\update_option( 'somecaptions-wpclient' . '-site-info-sent', true );
 		}
 	}
 
@@ -175,7 +179,7 @@ class Actions {
 	 * @return void
 	 */
 	public function update_site_info() {
-		\error_log('SomeCaptions - Site info changed, updating');
+		// \error_log('SomeCaptions - Site info changed, updating');
 		$this->send_site_info();
 	}
 
@@ -192,23 +196,23 @@ class Actions {
 		
 		// If site name is empty, try alternative methods
 		if (empty($site_name)) {
-			\error_log('SomeCaptions - Site Name is empty, trying alternative methods');
+			// \error_log('SomeCaptions - Site Name is empty, trying alternative methods');
 			$site_name = \get_option('blogname');
-			\error_log('SomeCaptions - Site Name from option: ' . $site_name);
+			// \error_log('SomeCaptions - Site Name from option: ' . $site_name);
 			
 			// If still empty, use the domain name as a fallback
 			if (empty($site_name)) {
-				$parsed_url = parse_url(\site_url());
+				$parsed_url = \wp_parse_url(\site_url());
 				$site_name = isset($parsed_url['host']) ? $parsed_url['host'] : 'WordPress Site';
-				\error_log('SomeCaptions - Using domain as site name: ' . $site_name);
+				// \error_log('SomeCaptions - Using domain as site name: ' . $site_name);
 			}
 		}
 		
 		$site_url = \site_url();
 		
 		// Log the values for debugging
-		\error_log('SomeCaptions - Sending Site Name: ' . $site_name);
-		\error_log('SomeCaptions - Sending Site URL: ' . $site_url);
+		// \error_log('SomeCaptions - Sending Site Name: ' . $site_name);
+		// \error_log('SomeCaptions - Sending Site URL: ' . $site_url);
 		
 		// Only send if we have values
 		if (!empty($site_name) && !empty($site_url)) {
@@ -219,11 +223,109 @@ class Actions {
 			$ep = '/api/wpclient/online';
 			$response = ApiClient::request($ep, $form_params);
 			
-			\error_log('SomeCaptions - Site info sent response: ' . print_r($response, true));
+			// \error_log('SomeCaptions - Site info sent response: ' . print_r($response, true));
 			return $response;
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Validate API settings via AJAX
+	 *
+	 * @since 3.0.2
+	 *
+	 * @return void
+	 */
+	public function validate_api_settings() {
+		// Check if this is an AJAX request
+		if (!defined('DOING_AJAX') || !DOING_AJAX) {
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SomeCaptions - validate_api_settings: Not an AJAX request');
+			}
+			\wp_send_json_error(array('message' => 'Invalid request method'));
+			return;
+		}
+
+		// Verify nonce
+		if (!isset($_POST['nonce']) || !\wp_verify_nonce(\sanitize_text_field($_POST['nonce']), 'somecaptions_validate_api')) {
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SomeCaptions - validate_api_settings: Invalid nonce');
+			}
+			\wp_send_json_error(array('message' => 'Security check failed'));
+			return;
+		}
+		
+		// Get the submitted settings
+		$endpoint = isset($_POST['endpoint']) ? \sanitize_text_field($_POST['endpoint']) : '';
+		$api_key = isset($_POST['api_key']) ? \sanitize_text_field($_POST['api_key']) : '';
+		
+		if (empty($endpoint) || empty($api_key)) {
+			\wp_send_json_error(array('message' => 'API endpoint and key are required'));
+			return;
+		}
+		
+		// Save the settings to the WordPress options table
+		$options = \get_option('somecaptions-wpclient' . '-settings', array());
+		$options['endpoint'] = $endpoint;
+		$options['api_key'] = $api_key;
+		\update_option('somecaptions-wpclient' . '-settings', $options);
+		
+		// Test the API connection with the newly saved settings
+		try {
+			// Use the ApiClient class to ensure we're using the same code path as the rest of the plugin
+			$form_params = array(
+				'site_url' => \site_url(),
+				'site_name' => \get_bloginfo('name'),
+				'wp_version' => \get_bloginfo('version'),
+				'plugin_version' => SW_VERSION
+			);
+			
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SomeCaptions - validate_api_settings: Testing API connection with endpoint: ' . $endpoint);
+			}
+			// Force ApiClient to reload settings from the database
+			ApiClient::reset();
+			$ep = '/api/wpclient/online';
+			$response = ApiClient::request($ep, $form_params);
+			
+			// If we get here, the API connection was successful
+			// Mark the plugin as initialized
+			\update_option('somecaptions-wpclient' . '-init', true);
+			
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SoMeCaptions - validate_api_settings: API connection successful, plugin initialized');
+			}
+			
+			// Send success response
+			\wp_send_json_success(array(
+				'message' => 'API connection successful! Your settings have been saved.',
+				'show_domain_tab' => true
+			));
+		} catch (\Exception $e) {
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				// \error_log('SoMeCaptions - validate_api_settings: API connection failed: ' . $e->getMessage());
+			}
+			\wp_send_json_error(array(
+				'message' => 'API connection failed: ' . $e->getMessage()
+			));
+			return;
+		}
+	}
+	
+	/**
+	 * Load domain tab content via AJAX
+	 *
+	 * @since 3.0.2
+	 *
+	 * @return void
+	 */
+	public function load_domain_tab() {
+		ob_start();
+		include_once SW_PLUGIN_ROOT . 'backend/views/settings-domain.php';
+		$content = ob_get_clean();
+		echo \wp_kses_post($content);
+		\wp_die();
 	}
 
 }

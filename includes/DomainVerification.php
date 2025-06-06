@@ -3,10 +3,10 @@
  * SomeCaptions Domain Verification
  * 
  * This file contains the code for domain verification in the WordPress plugin.
- * It should be integrated into the existing SomeCaptions WPClient plugin.
+ * It should be integrated into the existing SoMeCaptions WPClient plugin.
  */
 
-namespace SomeCaptions_WPClient\Includes;
+namespace SoMeCaptions_WPClient\Includes;
 
 /**
  * Global debug message array to store debug messages in memory
@@ -21,20 +21,20 @@ function sw_debug_log($message) {
     global $sc_debug_messages;
     
     // Format the message
-    $timestamp = date('[Y-m-d H:i:s]');
+    $timestamp = gmdate('[Y-m-d H:i:s]');
     $log_message = $timestamp . ' ' . $message;
     
     // Store in memory array
     $sc_debug_messages[] = $log_message;
     
     // Also log to PHP error log as a fallback
-    error_log('SomeCaptions: ' . $log_message);
+    // error_log('SomeCaptions: ' . $log_message);
     
     return $log_message;
 }
 
 // Test log entry
-sw_debug_log('SomeCaptions Debug Log Initialized - ' . date('Y-m-d H:i:s'));
+sw_debug_log('SomeCaptions Debug Log Initialized - ' . gmdate('Y-m-d H:i:s'));
 
 class DomainVerification {
     /**
@@ -73,8 +73,8 @@ class DomainVerification {
                 global $sc_debug_messages;
                 
                 echo '<div class="notice notice-info"><p>';
-                echo '<strong>SomeCaptions Debug Mode</strong><br>';
-                echo 'Debug mode is enabled. Check the browser console for debug information.';
+                echo '<strong>' . esc_html__('SomeCaptions Debug Mode', 'somecaptions-wpclient') . '</strong><br>';
+                echo esc_html__('Debug mode is enabled. Check the browser console for debug information.', 'somecaptions-wpclient');
                 echo '</p></div>';
             });
         }
@@ -92,7 +92,7 @@ class DomainVerification {
      * Add verification fields to the settings page
      */
     public function add_verification_fields() {
-        $cmb = \cmb2_get_metabox(SW_TEXTDOMAIN . '_options');
+        $cmb = \cmb2_get_metabox('somecaptions-wpclient' . '_options');
         
         if (!$cmb) {
             return;
@@ -100,8 +100,8 @@ class DomainVerification {
         
         // Add verification code field
         $cmb->add_field(array(
-            'name'    => __('Domain Verification Code', SW_TEXTDOMAIN),
-            'desc'    => __('Enter the verification code from your SomeCaptions dashboard', SW_TEXTDOMAIN),
+            'name'    => __('Domain Verification Code', 'somecaptions-wpclient'),
+            'desc'    => __('Enter the verification code from your SomeCaptions dashboard', 'somecaptions-wpclient'),
             'id'      => 'verification_code',
             'type'    => 'text',
             'default' => '',
@@ -178,7 +178,7 @@ class DomainVerification {
             'wordpress_version' => get_bloginfo('version'),
             'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
             'user' => get_current_user(),
-            'time' => date('Y-m-d H:i:s'),
+            'time' => gmdate('Y-m-d H:i:s'),
             'wp_content_dir' => defined('WP_CONTENT_DIR') ? WP_CONTENT_DIR : 'Not defined',
             'plugin_dir' => dirname(__FILE__),
             'temp_dir' => sys_get_temp_dir(),
@@ -238,7 +238,7 @@ class DomainVerification {
         }
         
         // Save verification status
-        update_option(SW_TEXTDOMAIN . '-domain-verified', true);
+        update_option('somecaptions-wpclient' . '-domain-verified', true);
         sw_debug_log('DomainVerification - Saved verification status');
         wp_send_json_success(array('message' => 'Verification status saved'));
     }
@@ -248,40 +248,44 @@ class DomainVerification {
      */
     public function verify_domain() {
         // Debug log for AJAX handler
-        sw_debug_log('DomainVerification - verify_domain() method called');
-        sw_debug_log('DomainVerification - POST data: ' . print_r($_POST, true));
-        sw_debug_log('DomainVerification - REQUEST data: ' . print_r($_REQUEST, true));
-        sw_debug_log('DomainVerification - Server info: ' . print_r($_SERVER, true));
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            sw_debug_log('DomainVerification - verify_domain() method called');
+            // Only log essential data, not the entire arrays
+            sw_debug_log('DomainVerification - POST data keys: ' . print_r(array_keys($_POST), true));
+            sw_debug_log('DomainVerification - REQUEST data keys: ' . print_r(array_keys($_REQUEST), true));
+        }
         
         // Check if this is an AJAX request
         if (!defined('DOING_AJAX') || !DOING_AJAX) {
-            sw_debug_log('DomainVerification - WARNING: Not an AJAX request!');
-        }
-        
-        // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'somecaptions_verify_domain')) {
-            sw_debug_log('DomainVerification - Invalid nonce');
-            wp_send_json_error(array('message' => 'Invalid security token'));
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                sw_debug_log('DomainVerification - WARNING: Not an AJAX request!');
+            }
+            wp_send_json_error(array('message' => 'Invalid request method'));
             return;
         }
         
-        // Get verification code
+        // Verify nonce for security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'somecaptions_verify_domain')) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                sw_debug_log('DomainVerification - Invalid nonce!');
+            }
+            wp_send_json_error(array('message' => 'Security check failed'));
+            return;
+        }
+        
+        // Get verification code from request
         $verification_code = isset($_POST['verification_code']) ? sanitize_text_field($_POST['verification_code']) : '';
-        
-        if (empty($verification_code)) {
-            sw_debug_log('DomainVerification - Empty verification code');
-            wp_send_json_error(array('message' => 'Verification code is required'));
-            return;
-        }
         
         // Get domain name from site URL
         $site_url = site_url();
-        $parsed_url = parse_url($site_url);
+        $parsed_url = wp_parse_url($site_url);
         $domain_name = $parsed_url['host'];
         
-        // Debug log
-        sw_debug_log('DomainVerification - Domain: ' . $domain_name);
-        sw_debug_log('DomainVerification - Code: ' . $verification_code);
+        // Debug log only in debug mode
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            sw_debug_log('DomainVerification - Domain: ' . $domain_name);
+            sw_debug_log('DomainVerification - Code: ' . $verification_code);
+        }
         
         // Try to verify domain using the API endpoint
         try {
@@ -294,7 +298,15 @@ class DomainVerification {
             
             // Get API settings
             $opts = \sw_get_settings();
-            sw_debug_log('DomainVerification - API Settings: ' . print_r($opts, true));
+            
+            // Debug log API settings (with redacted API key) only in debug mode
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                $log_opts = $opts;
+                if (isset($log_opts['api_key'])) {
+                    $log_opts['api_key'] = '***REDACTED***';
+                }
+                sw_debug_log('DomainVerification - API Settings: ' . print_r($log_opts, true));
+            }
             
             $api_endpoint = trailingslashit($opts['endpoint']);
             $api_key = $opts['api_key'];
@@ -310,47 +322,55 @@ class DomainVerification {
             
             // Make API request directly since this endpoint expects JSON
             $target_url = $api_endpoint . 'api/wpclient/verify-domain';
-            sw_debug_log('DomainVerification - Sending request to: ' . $target_url);
-            sw_debug_log('DomainVerification - Request body: ' . $json_params);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                sw_debug_log('DomainVerification - Sending request to: ' . $target_url);
+                sw_debug_log('DomainVerification - Request body: ' . $json_params);
+            }
             
             $headers = array(
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $api_key,
                 'Origin' => site_url()
             );
-            sw_debug_log('DomainVerification - Request headers: ' . print_r($headers, true));
-            
-            $response = wp_remote_post($target_url, array(
-                'headers' => $headers,
-                'body' => $json_params,
-                'timeout' => 30,
-                'sslverify' => false // For testing only, remove in production
-            ));
-            
-            // Debug log
-            $response_code = wp_remote_retrieve_response_code($response);
-            sw_debug_log('DomainVerification - Response code: ' . $response_code);
-            
-            // Check for errors
-            if (is_wp_error($response)) {
-                sw_debug_log('DomainVerification - Error: ' . $response->get_error_message());
-                wp_send_json_error(array('message' => 'API request failed: ' . $response->get_error_message()));
-                return;
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                // Redact sensitive information from headers
+                $safe_headers = $headers;
+                if (isset($safe_headers['Authorization'])) {
+                    $safe_headers['Authorization'] = 'Bearer ****';
+                }
+                sw_debug_log('DomainVerification - Request headers: ' . print_r($safe_headers, true));
             }
             
-            // Parse response
-            $body = wp_remote_retrieve_body($response);
-            sw_debug_log('DomainVerification - Response body: ' . $body);
-            sw_debug_log('DomainVerification - Response headers: ' . print_r(wp_remote_retrieve_headers($response), true));
+            $response = ApiClient::request('/api/wpclient/verify-domain', array(
+                'domain_name' => $domain_name,
+                'verification_code' => $verification_code
+            ));
             
+           // Check for WP_Error
+            if (!$response) {
+                wp_send_json_error(['message' => 'API request failed']);
+                return;
+            }
+
+            // Use the correct Guzzle methods
+            $response_code = $response->getStatusCode();
+            $body = (string) $response->getBody();
+
+            // Parse the JSON response
             $data = json_decode($body, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                sw_debug_log('DomainVerification - JSON decode error: ' . json_last_error_msg());
+
+            // Check success condition
+            if ($response_code === 200 && $data['success']) {
+                update_option('somecaptions-wpclient-domain-verified', true);
+                wp_send_json_success(['message' => 'Domain verified successfully']);
+            } else {
+                $error_message = $data['message'] ?? 'Domain verification failed';
+                wp_send_json_error(['message' => $error_message]);
             }
             
             if (isset($data['success']) && $data['success']) {
                 // Save verification status
-                update_option(SW_TEXTDOMAIN . '-domain-verified', true);
+                update_option('somecaptions-wpclient' . '-domain-verified', true);
                 sw_debug_log('DomainVerification - Success! Domain verified');
                 wp_send_json_success(array('message' => 'Domain verified successfully'));
             } else {
