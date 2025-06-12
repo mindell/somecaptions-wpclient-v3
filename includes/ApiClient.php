@@ -74,9 +74,20 @@ class ApiClient{
 	 * @return any
 	 */
 	public static function request( $ep, $form_params) {
+		// Sanitize endpoint parameter
+		$ep = sanitize_text_field($ep);
+		
+		// Validate form parameters
+		if (!is_array($form_params)) {
+			$form_params = array();
+		} else {
+			// Recursively sanitize all form parameters
+			$form_params = self::sanitize_recursive($form_params);
+		}
+		
 		$client = self::client();
 		$opts   = \sw_get_settings();
-		$api_key = $opts['api_key'];
+		$api_key = isset($opts['api_key']) ? sanitize_text_field($opts['api_key']) : '';
 		
 		// Debug log only in development mode
 		if (defined('WP_DEBUG') && WP_DEBUG) {
@@ -148,15 +159,25 @@ class ApiClient{
 			}
 			
 			$res = $client->request('POST', $ep, $request_options);
+		
+		// If we get here, the request was successful
+		// Update the connection status option
+		if ($res->getStatusCode() >= 200 && $res->getStatusCode() < 300) {
+			\update_option('somecaptions-client-connected', true);
 			
-			// Debug response only in development mode
-			if (defined('WP_DEBUG') && WP_DEBUG) {
-				// \error_log('SomeCaptions API Response - Status: ' . $res->getStatusCode());
-				// \error_log('SomeCaptions API Response - Body: ' . $res->getBody());
-			}
-			
+			// Store the last successful connection time
+			\update_option('somecaptions-client-last-connected', time());
+		}
+		
+		// Debug response only in development mode
+		if (defined('WP_DEBUG') && WP_DEBUG) {
+			// \error_log('SomeCaptions API Response - Status: ' . $res->getStatusCode());
+			// \error_log('SomeCaptions API Response - Body: ' . $res->getBody());
+		}
 		}catch(\GuzzleHttp\Exception\BadResponseException $e){
 			self::_error( $e->getMessage() );
+			// Mark as disconnected on error
+			\update_option('somecaptions-client-connected', false);
 			if (defined('WP_DEBUG') && WP_DEBUG) { 
 				// \error_log('SomeCaptions API Error - BadResponseException: ' . $e->getMessage());
 			}
@@ -218,13 +239,56 @@ class ApiClient{
 	 * 
 	 * @return void
 	 */
+	/**
+	 * Recursively sanitize an array of values
+	 *
+	 * @since 3.0.2
+	 *
+	 * @param array $data The array to sanitize
+	 * @return array The sanitized array
+	 */
+	protected static function sanitize_recursive($data) {
+		if (!is_array($data)) {
+			return sanitize_text_field($data);
+		}
+		
+		$sanitized = array();
+		foreach ($data as $key => $value) {
+			$sanitized_key = sanitize_text_field($key);
+			
+			if (is_array($value)) {
+				$sanitized[$sanitized_key] = self::sanitize_recursive($value);
+			} else {
+				$sanitized[$sanitized_key] = sanitize_text_field($value);
+			}
+		}
+		
+		return $sanitized;
+	}
+
 	protected static function _error($message) {
 		global $pagenow;
+		
+		// Verify nonce when processing GET data
 		if ( isset( $_GET['page'] ) ) {
-			if ( $_GET['page'] == 'somecaptions-wpclient' && $pagenow == 'admin.php' ) {
-				\wpdesk_wp_notice( 'somecaptions-wpclient' . ': ' .$message, 'error', true );
+			// Sanitize the page parameter
+			$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+			
+			// Check if we're on the plugin admin page and verify nonce if available
+			if ( $page === 'somecaptions-client' && $pagenow === 'admin.php' ) {
+				// Check for nonce if this is a form submission
+				if ( isset( $_REQUEST['_wpnonce'] ) ) {
+					$nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) );
+					if ( ! wp_verify_nonce( $nonce, 'somecaptions_api_action' ) ) {
+						// If nonce verification fails, still show the error but don't proceed further
+						// Debug logging removed for production code
+						return;
+					}
+				}
+				
+				// Display the error message
+				\wpdesk_wp_notice( esc_html( 'SoMe Captions Client: ' . $message ), 'error', true );
 			}
-
 		}
 
 	}

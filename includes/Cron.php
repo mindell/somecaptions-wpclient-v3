@@ -78,17 +78,17 @@ class Cron{
         if( $res ) {
             $body = json_decode( (string) $res->getBody() );
             if( $body->success ) {
-                $gsc_connected = \get_option( 'somecaptions-wpclient' . '-gsc-connected' );
+                $gsc_connected = \get_option( 'somecaptions-client' . '-gsc-connected' );
                 if( isset($body->gsc_connected ) && !$gsc_connected ) {
-                    \add_option( 'somecaptions-wpclient' . '-gsc-connected', true );
+                    \add_option( 'somecaptions-client' . '-gsc-connected', true );
                 } else if( !isset($body->gsc_connected ) && $gsc_connected ) {
-                    \delete_option( 'somecaptions-wpclient' . '-gsc-connected' );
+                    \delete_option( 'somecaptions-client' . '-gsc-connected' );
                 }
                 $articles           = $body->articles;
                 foreach( $articles as $article ) {
                     $Parsedown          = new Parsedown();
                     $post_content       = $Parsedown->text( $article->content );
-                    $author_user_id     = \get_option( 'somecaptions-wpclient' . '-user_id' );
+                    $author_user_id     = \get_option( 'somecaptions-client' . '-user_id' );
                     if(isset($article->author)) { // legacy support
                         if($article->author) {
                             $author_user_id = $article->author->wp_user_id;

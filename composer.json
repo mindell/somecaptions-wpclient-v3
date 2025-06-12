@@ -1,5 +1,5 @@
 {
-    "name": "mindell/somecaptions-wpclient",
+    "name": "mindell/somecaptions-client",
     "description": "WordPress plugin for somecaptions.dk",
     "type": "wordpress-plugin",
     "authors": [

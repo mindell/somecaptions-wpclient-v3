@@ -80,19 +80,19 @@
 // Create the general settings CMB2 box
 $cmb = new_cmb2_box(
     array(
-        'id'           => 'somecaptions-wpclient' . '_options',
+        'id'           => 'somecaptions-client' . '_options',
         'hookup'       => false,
-        'show_on'      => array('key' => 'options-page', 'value' => array('somecaptions-wpclient')),
+        'show_on'      => array('key' => 'options-page', 'value' => array('somecaptions-client')),
         'show_names'   => true,
         'object_types' => array('options-page'),
-        'option_key'   => 'somecaptions-wpclient' . '_options',
+        'option_key'   => 'somecaptions-client' . '_options',
     )
 );
 
 // API Endpoint field
 $cmb->add_field(
     array(
-        'name'    => __('API endpoint', 'somecaptions-wpclient'),
+        'name'    => __('API endpoint', 'somecaptions-client'),
         'id'      => 'endpoint',
         'type'    => 'text',
         'default' => 'https://api.somecaptions.dk/',
@@ -102,7 +102,7 @@ $cmb->add_field(
 // API Key field
 $cmb->add_field(
     array(
-        'name'    => __('API key', 'somecaptions-wpclient'),
+        'name'    => __('API key', 'somecaptions-client'),
         'id'      => 'api_key',
         'type'    => 'text',
         'default' => '',
@@ -110,14 +110,14 @@ $cmb->add_field(
 );
 
 // Render the form
-cmb2_metabox_form('somecaptions-wpclient' . '_options', 'somecaptions-wpclient' . '-settings');
+cmb2_metabox_form('somecaptions-client' . '_options', 'somecaptions-client' . '-settings');
 ?>
 </div>
 
 <script>
 jQuery(document).ready(function($) {
     // Intercept the form submission
-    $('#<?php echo esc_attr('somecaptions-wpclient'); ?>-settings').on('submit', function(e) {
+    $('#<?php echo esc_attr('somecaptions-client'); ?>-settings').on('submit', function(e) {
         e.preventDefault();
         
         // Show loading message
@@ -126,7 +126,7 @@ jQuery(document).ready(function($) {
         
         // Get form data and add action parameter
         var formData = $(this).serialize();
-        formData += '&action=cmb2_save_options-page_fields&object_id=' + '<?php echo esc_attr('somecaptions-wpclient'); ?>_options';
+        formData += '&action=cmb2_save_options-page_fields&object_id=' + '<?php echo esc_attr('somecaptions-client'); ?>_options';
         
         // First save the form via AJAX
         $.ajax({

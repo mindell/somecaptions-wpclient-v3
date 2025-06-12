@@ -20,7 +20,7 @@ class Actions {
      * @since 0.0.1
      */
     public function __construct(){
-		$initialized = \get_option( 'somecaptions-wpclient' . '-init' );
+		$initialized = \get_option( 'somecaptions-client' . '-init' );
 		if($initialized) {
 			\add_action( 'create_category',  array( & $this, 'somecaptions_new_category' ),      10, 1 );
 			\add_action( 'delete_category',  array( & $this, 'somecaptions_remove_category' ),   10, 1 );
@@ -160,14 +160,14 @@ class Actions {
 	 */
 	public function maybe_send_site_info() {
 		// Only run this once or when forced
-		$site_info_sent = \get_option( 'somecaptions-wpclient' . '-site-info-sent', false );
+		$site_info_sent = \get_option( 'somecaptions-client' . '-site-info-sent', false );
 		
 		if (!$site_info_sent) {
 			// \error_log('SomeCaptions - Sending site info for the first time');
 			$this->send_site_info();
 			
 			// Mark as sent so we don't do it again unless site info changes
-			\update_option( 'somecaptions-wpclient' . '-site-info-sent', true );
+			\update_option( 'somecaptions-client' . '-site-info-sent', true );
 		}
 	}
 
@@ -248,7 +248,7 @@ class Actions {
 		}
 
 		// Verify nonce
-		if (!isset($_POST['nonce']) || !\wp_verify_nonce(\sanitize_text_field($_POST['nonce']), 'somecaptions_validate_api')) {
+		if (!isset($_POST['nonce']) || !\wp_verify_nonce(\sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_validate_api')) {
 			if (defined('WP_DEBUG') && WP_DEBUG) {
 				// \error_log('SomeCaptions - validate_api_settings: Invalid nonce');
 			}
@@ -257,8 +257,8 @@ class Actions {
 		}
 		
 		// Get the submitted settings
-		$endpoint = isset($_POST['endpoint']) ? \sanitize_text_field($_POST['endpoint']) : '';
-		$api_key = isset($_POST['api_key']) ? \sanitize_text_field($_POST['api_key']) : '';
+		$endpoint = isset($_POST['endpoint']) ? \sanitize_text_field(wp_unslash($_POST['endpoint'])) : '';
+		$api_key = isset($_POST['api_key']) ? \sanitize_text_field(wp_unslash($_POST['api_key'])) : '';
 		
 		if (empty($endpoint) || empty($api_key)) {
 			\wp_send_json_error(array('message' => 'API endpoint and key are required'));
@@ -266,10 +266,10 @@ class Actions {
 		}
 		
 		// Save the settings to the WordPress options table
-		$options = \get_option('somecaptions-wpclient' . '-settings', array());
+		$options = \get_option('somecaptions-client' . '-settings', array());
 		$options['endpoint'] = $endpoint;
 		$options['api_key'] = $api_key;
-		\update_option('somecaptions-wpclient' . '-settings', $options);
+		\update_option('somecaptions-client' . '-settings', $options);
 		
 		// Test the API connection with the newly saved settings
 		try {
@@ -291,10 +291,10 @@ class Actions {
 			
 			// If we get here, the API connection was successful
 			// Mark the plugin as initialized
-			\update_option('somecaptions-wpclient' . '-init', true);
+			\update_option('somecaptions-client' . '-init', true);
 			
 			if (defined('WP_DEBUG') && WP_DEBUG) {
-				// \error_log('SoMeCaptions - validate_api_settings: API connection successful, plugin initialized');
+				// \error_log('SoMe Captions - validate_api_settings: API connection successful, plugin initialized');
 			}
 			
 			// Send success response
@@ -304,7 +304,7 @@ class Actions {
 			));
 		} catch (\Exception $e) {
 			if (defined('WP_DEBUG') && WP_DEBUG) {
-				// \error_log('SoMeCaptions - validate_api_settings: API connection failed: ' . $e->getMessage());
+				// \error_log('SoMe Captions - validate_api_settings: API connection failed: ' . $e->getMessage());
 			}
 			\wp_send_json_error(array(
 				'message' => 'API connection failed: ' . $e->getMessage()

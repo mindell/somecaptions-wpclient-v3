@@ -117,7 +117,7 @@ class ActDeact{
 		}
 
 		\update_option( 'somecaptionswpclient-version', SW_VERSION );
-		\delete_option( 'somecaptions-wpclient' . '_fake-meta' );
+		\delete_option( 'somecaptions-client' . '_fake-meta' );
 	}
 
 	/**
@@ -135,8 +135,10 @@ class ActDeact{
 		// \error_log('SomeCaptions Activation - Initial activation, site info will be sent when admin loads');
 		
 		// Reset the site-info-sent flag so it will be sent again when admin loads
-		\delete_option( 'somecaptions-wpclient' . '-site-info-sent' );
+		\delete_option( 'somecaptions-client' . '-site-info-sent' );
 		
+		// Reset connection status to ensure it's updated on next API call
+		\delete_option('somecaptions-client-connected');
 		
 		// Send initial activation request
 		// The complete site info will be sent later when admin_init runs
@@ -145,7 +147,14 @@ class ActDeact{
 			'site_url'  => ''
 		);
 		$ep = '/api/wpclient/online';
-		ApiClient::request($ep, $form_params);
+		$response = ApiClient::request($ep, $form_params);
+		
+		// Update connection status based on response
+		if ($response && $response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+			\update_option('somecaptions-client-connected', true);
+		} else {
+			\update_option('somecaptions-client-connected', false);
+		}
 		
 		// \error_log('SomeCaptions Activation - Initial activation complete, full site info will be sent when admin loads');
 		
@@ -165,19 +174,22 @@ class ActDeact{
 		$form_params = array();
 		$ep          = '/api/wpclient/offline';
 		ApiClient::request( $ep, $form_params );
-		\delete_option( 'somecaptions-wpclient' . '-init' );
-        \delete_option( 'somecaptions-wpclient' . '-settings' );
-		
+		\delete_option( 'somecaptions-client' . '-init' );
+        \delete_option( 'somecaptions-client' . '-settings' );
+		\delete_option('somecaptions-client-domain-verified');
 		// Delete domain verification status
-		\delete_option( 'somecaptions-wpclient' . '-domain-verified' );
+		\delete_option( 'somecaptions-client' . '-domain-verified' );
+		// Delete connection status
+		\delete_option('somecaptions-client-connected');
+		\delete_option('somecaptions-client-last-connected');
 		
-		$gsc_connected = \get_option( 'somecaptions-wpclient' . '-gsc-connected' );
+		$gsc_connected = \get_option( 'somecaptions-client' . '-gsc-connected' );
 		if( $gsc_connected ) {
-			\delete_option( 'somecaptions-wpclient' . '-gsc-connected' );
+			\delete_option( 'somecaptions-client' . '-gsc-connected' );
 		}
-		$user_id = \get_option( 'somecaptions-wpclient' . '-user_id' );
+		$user_id = \get_option( 'somecaptions-client' . '-user_id' );
 		if( $user_id ) {
-			\delete_option( 'somecaptions-wpclient' . '-user_id' );
+			\delete_option( 'somecaptions-client' . '-user_id' );
 		}
 		
 		// Clear the permalinks

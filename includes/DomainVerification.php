@@ -3,7 +3,7 @@
  * SomeCaptions Domain Verification
  * 
  * This file contains the code for domain verification in the WordPress plugin.
- * It should be integrated into the existing SoMeCaptions WPClient plugin.
+ * It should be integrated into the existing SoMe Captions Client plugin.
  */
 
 namespace SoMeCaptions_WPClient\Includes;
@@ -73,8 +73,8 @@ class DomainVerification {
                 global $sc_debug_messages;
                 
                 echo '<div class="notice notice-info"><p>';
-                echo '<strong>' . esc_html__('SomeCaptions Debug Mode', 'somecaptions-wpclient') . '</strong><br>';
-                echo esc_html__('Debug mode is enabled. Check the browser console for debug information.', 'somecaptions-wpclient');
+                echo '<strong>' . esc_html__('SomeCaptions Debug Mode', 'somecaptions-client') . '</strong><br>';
+                echo esc_html__('Debug mode is enabled. Check the browser console for debug information.', 'somecaptions-client');
                 echo '</p></div>';
             });
         }
@@ -83,7 +83,30 @@ class DomainVerification {
         add_action('admin_init', function() {
             sw_debug_log('DomainVerification - Admin initialized');
             if (defined('DOING_AJAX') && DOING_AJAX) {
-                sw_debug_log('DomainVerification - AJAX request detected: ' . $_REQUEST['action'] ?? 'unknown action');
+                // Only process AJAX requests with valid nonces for our plugin actions
+                $somecaptions_actions = array(
+                    'somecaptions_verify_domain',
+                    'somecaptions_save_verification',
+                    'somecaptions_test_ajax',
+                    'somecaptions_get_debug_log'
+                );
+                
+                // Properly sanitize and unslash the action parameter
+                $action = isset($_REQUEST['action']) ? sanitize_text_field(wp_unslash($_REQUEST['action'])) : 'unknown action';
+                
+                // Check for nonce if this is one of our plugin's AJAX actions
+                if (in_array($action, $somecaptions_actions)) {
+                    sw_debug_log('DomainVerification - SoMe Captions AJAX request detected: ' . $action);
+                    
+                    // Verify nonce for all our AJAX actions
+                    // Note: Each AJAX handler will also verify its own nonce, this is an additional security layer
+                    if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(
+                        sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])),
+                        'somecaptions_api_action'
+                    )) {
+                        sw_debug_log('DomainVerification - Admin init: Invalid nonce in AJAX request');
+                    }
+                }
             }
         });
     }
@@ -92,7 +115,7 @@ class DomainVerification {
      * Add verification fields to the settings page
      */
     public function add_verification_fields() {
-        $cmb = \cmb2_get_metabox('somecaptions-wpclient' . '_options');
+        $cmb = \cmb2_get_metabox('somecaptions-client' . '_options');
         
         if (!$cmb) {
             return;
@@ -100,8 +123,8 @@ class DomainVerification {
         
         // Add verification code field
         $cmb->add_field(array(
-            'name'    => __('Domain Verification Code', 'somecaptions-wpclient'),
-            'desc'    => __('Enter the verification code from your SomeCaptions dashboard', 'somecaptions-wpclient'),
+            'name'    => __('Domain Verification Code', 'somecaptions-client'),
+            'desc'    => __('Enter the verification code from your SomeCaptions dashboard', 'somecaptions-client'),
             'id'      => 'verification_code',
             'type'    => 'text',
             'default' => '',
@@ -166,7 +189,7 @@ class DomainVerification {
         sw_debug_log('DomainVerification - get_debug_log() method called');
         
         // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'somecaptions_verify_domain')) {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_verify_domain')) {
             sw_debug_log('DomainVerification - Invalid nonce in get_debug_log');
             wp_send_json_error(array('message' => 'Invalid security token'));
             return;
@@ -176,7 +199,7 @@ class DomainVerification {
         $debug_info = array(
             'php_version' => PHP_VERSION,
             'wordpress_version' => get_bloginfo('version'),
-            'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
+            'server_software' => isset($_SERVER['SERVER_SOFTWARE']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE'])) : 'Unknown',
             'user' => get_current_user(),
             'time' => gmdate('Y-m-d H:i:s'),
             'wp_content_dir' => defined('WP_CONTENT_DIR') ? WP_CONTENT_DIR : 'Not defined',
@@ -227,18 +250,34 @@ class DomainVerification {
     public function save_verification() {
         // Debug log for AJAX handler
         sw_debug_log('DomainVerification - save_verification() method called');
-        sw_debug_log('DomainVerification - POST data: ' . print_r($_POST, true));
-        sw_debug_log('DomainVerification - REQUEST data: ' . print_r($_REQUEST, true));
+        
+        // Debug logging removed for production code
+        // For development, uncomment the following code block:
+        /*
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            // Sanitize data before logging
+            $sanitized_post = array_map('sanitize_text_field', wp_unslash($_POST));
+            $sanitized_request = array_map('sanitize_text_field', wp_unslash($_REQUEST));
+            
+            // Remove sensitive data
+            if (isset($sanitized_post['api_key'])) $sanitized_post['api_key'] = '***REDACTED***';
+            if (isset($sanitized_request['api_key'])) $sanitized_request['api_key'] = '***REDACTED***';
+            
+            // Log sanitized data
+            sw_debug_log('DomainVerification - POST data available');
+            sw_debug_log('DomainVerification - REQUEST data available');
+        }
+        */
         
         // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'somecaptions_verify_domain')) {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_verify_domain')) {
             sw_debug_log('DomainVerification - Invalid nonce in save_verification');
             wp_send_json_error(array('message' => 'Invalid security token'));
             return;
         }
         
         // Save verification status
-        update_option('somecaptions-wpclient' . '-domain-verified', true);
+        update_option('somecaptions-client' . '-domain-verified', true);
         sw_debug_log('DomainVerification - Saved verification status');
         wp_send_json_success(array('message' => 'Verification status saved'));
     }
@@ -250,9 +289,15 @@ class DomainVerification {
         // Debug log for AJAX handler
         if (defined('WP_DEBUG') && WP_DEBUG) {
             sw_debug_log('DomainVerification - verify_domain() method called');
+            // Debug logging of request data removed for production code
+            // For development, uncomment the following code block:
+            /*
             // Only log essential data, not the entire arrays
-            sw_debug_log('DomainVerification - POST data keys: ' . print_r(array_keys($_POST), true));
-            sw_debug_log('DomainVerification - REQUEST data keys: ' . print_r(array_keys($_REQUEST), true));
+            $post_keys = array_map('sanitize_text_field', array_keys($_POST));
+            $request_keys = array_map('sanitize_text_field', array_keys($_REQUEST));
+            sw_debug_log('DomainVerification - POST data keys available');
+            sw_debug_log('DomainVerification - REQUEST data keys available');
+            */
         }
         
         // Check if this is an AJAX request
@@ -265,7 +310,7 @@ class DomainVerification {
         }
         
         // Verify nonce for security
-        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'somecaptions_verify_domain')) {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_verify_domain')) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 sw_debug_log('DomainVerification - Invalid nonce!');
             }
@@ -274,7 +319,7 @@ class DomainVerification {
         }
         
         // Get verification code from request
-        $verification_code = isset($_POST['verification_code']) ? sanitize_text_field($_POST['verification_code']) : '';
+        $verification_code = isset($_POST['verification_code']) ? sanitize_text_field(wp_unslash($_POST['verification_code'])) : '';
         
         // Get domain name from site URL
         $site_url = site_url();
@@ -301,11 +346,15 @@ class DomainVerification {
             
             // Debug log API settings (with redacted API key) only in debug mode
             if (defined('WP_DEBUG') && WP_DEBUG) {
+                // Debug logging removed for production code
+                // For development, uncomment the following code block:
+                /*
                 $log_opts = $opts;
                 if (isset($log_opts['api_key'])) {
                     $log_opts['api_key'] = '***REDACTED***';
                 }
-                sw_debug_log('DomainVerification - API Settings: ' . print_r($log_opts, true));
+                sw_debug_log('DomainVerification - API Settings available');
+                */
             }
             
             $api_endpoint = trailingslashit($opts['endpoint']);
@@ -333,12 +382,16 @@ class DomainVerification {
                 'Origin' => site_url()
             );
             if (defined('WP_DEBUG') && WP_DEBUG) {
+                // Debug logging removed for production code
+                // For development, uncomment the following code block:
+                /*
                 // Redact sensitive information from headers
                 $safe_headers = $headers;
                 if (isset($safe_headers['Authorization'])) {
                     $safe_headers['Authorization'] = 'Bearer ****';
                 }
-                sw_debug_log('DomainVerification - Request headers: ' . print_r($safe_headers, true));
+                sw_debug_log('DomainVerification - Request headers available');
+                */
             }
             
             $response = ApiClient::request('/api/wpclient/verify-domain', array(
@@ -361,7 +414,14 @@ class DomainVerification {
 
             // Check success condition
             if ($response_code === 200 && $data['success']) {
-                update_option('somecaptions-wpclient-domain-verified', true);
+                // Verify nonce again before updating options
+                if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_verify_domain')) {
+                    sw_debug_log('DomainVerification - Invalid nonce before updating options');
+                    wp_send_json_error(['message' => 'Security check failed']);
+                    return;
+                }
+                
+                update_option('somecaptions-client-domain-verified', true);
                 wp_send_json_success(['message' => 'Domain verified successfully']);
             } else {
                 $error_message = $data['message'] ?? 'Domain verification failed';
@@ -369,8 +429,15 @@ class DomainVerification {
             }
             
             if (isset($data['success']) && $data['success']) {
+                // Verify nonce again before updating options
+                if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'somecaptions_verify_domain')) {
+                    sw_debug_log('DomainVerification - Invalid nonce before updating options');
+                    wp_send_json_error(['message' => 'Security check failed']);
+                    return;
+                }
+                
                 // Save verification status
-                update_option('somecaptions-wpclient' . '-domain-verified', true);
+                update_option('somecaptions-client' . '-domain-verified', true);
                 sw_debug_log('DomainVerification - Success! Domain verified');
                 wp_send_json_success(array('message' => 'Domain verified successfully'));
             } else {

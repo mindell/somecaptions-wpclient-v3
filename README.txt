@@ -1,4 +1,4 @@
-=== SoMeCaptions WPClient ===
+=== SoMe Captions Client ===
 Contributors: mindell
 Tags: articles, publishing, somecaptions
 Requires at least: 5.2
@@ -8,11 +8,11 @@ License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Requires PHP: 7.4
 
-Integrate your WordPress site with SomeCaptions platform for automated content creation and publishing.
+Integrate your WordPress site with SoMe Captions platform for automated content creation and publishing.
 
 == Description ==
 
-SoMeCaptions WPClient allows you to seamlessly integrate your WordPress site with the SomeCaptions platform. This plugin enables automated content creation, publishing, and management directly from your SomeCaptions dashboard.
+SoMe Captions Client allows you to seamlessly integrate your WordPress site with the SomeCaptions platform. This plugin enables automated content creation, publishing, and management directly from your SomeCaptions dashboard.
 
 Key features include:
 

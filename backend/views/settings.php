@@ -1,30 +1,30 @@
 <?php
 /*
  * Retrieve these settings on front end in either of these ways:
- * phpcs:ignore $my_setting = cmb2_get_option( 'somecaptions-wpclient' . '-settings', 'some_setting', 'default' );
- * phpcs:ignore  $my_settings = get_option( 'somecaptions-wpclient' . '-settings', 'default too' );
+ * phpcs:ignore $my_setting = cmb2_get_option( 'somecaptions-client' . '-settings', 'some_setting', 'default' );
+ * phpcs:ignore  $my_settings = get_option( 'somecaptions-client' . '-settings', 'default too' );
  * CMB2 Snippet: https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/theme-options-cmb.php
  */
 
  $parsed_url = \wp_parse_url(site_url());
- $initialized = \get_option( 'somecaptions-wpclient' . '-init' );
- $gsc_connected = \get_option( 'somecaptions-wpclient' . '-gsc-connected' );
+ $initialized = \get_option( 'somecaptions-client' . '-init' );
+ $gsc_connected = \get_option( 'somecaptions-client' . '-gsc-connected' );
 ?>
 <div id="tabs-1" class="wrap">
 			<?php
 			$cmb = new_cmb2_box(
 				array(
-					'id'           => 'somecaptions-wpclient' . '_options',
+					'id'           => 'somecaptions-client' . '_options',
 					'hookup'       => false,
-					'show_on'      => array( 'key' => 'options-page', 'value' => array( 'somecaptions-wpclient' ) ),
+					'show_on'      => array( 'key' => 'options-page', 'value' => array( 'somecaptions-client' ) ),
 					'show_names'   => true,
 					'object_types' => array( 'options-page' ),
-					'option_key'   => 'somecaptions-wpclient' . '_options',
+					'option_key'   => 'somecaptions-client' . '_options',
 				)
 			);
 			$cmb->add_field(
 				array(
-					'name'    => __( 'API endpoint', 'somecaptions-wpclient' ),
+					'name'    => __( 'API endpoint', 'somecaptions-client' ),
 					'id'      => 'endpoint',
 					'type'    => 'text',
 					'default' => 'https://api.somecaptions.dk/',
@@ -32,40 +32,40 @@
 			);
 			$cmb->add_field(
 				array(
-					'name'    => __( 'API key', 'somecaptions-wpclient' ),
-					// phpcs:ignore 'desc'    => __( 'SomeCaptions API key', 'somecaptions-wpclient' ),
+					'name'    => __( 'API key', 'somecaptions-client' ),
+					// phpcs:ignore 'desc'    => __( 'SomeCaptions API key', 'somecaptions-client' ),
 					'id'      => 'api_key',
 					'type'    => 'text',
 					'default' => '',
 				)
 			);
             // Add verification section (only show if API key is set)
-			$api_key = cmb2_get_option('somecaptions-wpclient' . '-settings', 'api_key', '');
+			$api_key = cmb2_get_option('somecaptions-client' . '-settings', 'api_key', '');
 			if (!empty($api_key)) {
 				$cmb->add_field(
 					array(
-						'name'    => __( 'Domain Verification', 'somecaptions-wpclient' ),
+						'name'    => __( 'Domain Verification', 'somecaptions-client' ),
 						'id'      => 'verification_section',
 						'type'    => 'title',
-						'desc'    => __( 'Verify your domain ownership to enable full integration with SomeCaptions', 'somecaptions-wpclient' ),
+						'desc'    => __( 'Verify your domain ownership to enable full integration with SomeCaptions', 'somecaptions-client' ),
 					)
 				);
 				
 				$cmb->add_field(
 					array(
-						'name'    => __( 'Verification Code', 'somecaptions-wpclient' ),
+						'name'    => __( 'Verification Code', 'somecaptions-client' ),
 						'id'      => 'verification_code',
 						'type'    => 'text',
-						'desc'    => __( 'Enter the verification code from your SomeCaptions dashboard', 'somecaptions-wpclient' ),
+						'desc'    => __( 'Enter the verification code from your SomeCaptions dashboard', 'somecaptions-client' ),
 					)
 				);
 				
-				$domain_verified = get_option('somecaptions-wpclient' . '-domain-verified', false);
-				$verify_button_html = '<button type="button" id="verify-domain-btn" class="button button-primary">' . esc_html__('Verify Domain', 'somecaptions-wpclient') . '</button>';
+				$domain_verified = get_option('somecaptions-client' . '-domain-verified', false);
+				$verify_button_html = '<button type="button" id="verify-domain-btn" class="button button-primary">' . esc_html__('Verify Domain', 'somecaptions-client') . '</button>';
 				$verify_status_html = '<span id="verification-status" style="margin-left: 10px;">';
 				
 				if ($domain_verified) {
-					$verify_status_html .= '<span style="color:green;">' . esc_html__('✓ Domain verified', 'somecaptions-wpclient') . '</span>';
+					$verify_status_html .= '<span style="color:green;">' . esc_html__('✓ Domain verified', 'somecaptions-client') . '</span>';
 				}
 				
 				$verify_status_html .= '</span>';
@@ -79,11 +79,11 @@
 									$("#verify-domain-btn").on("click", function() {
 										const verification_code = $("#verification_code").val();
 										if (!verification_code) {
-											$("#verification-status").html("<span style=\'color:red\'>' . esc_js(__('Please enter a verification code', 'somecaptions-wpclient')) . '</span>");
+											$("#verification-status").html("<span style=\'color:red\'>' . esc_js(__('Please enter a verification code', 'somecaptions-client')) . '</span>");
 											return;
 										}
 										
-										$("#verification-status").html("<span style=\'color:blue\'>' . esc_js(__('Verifying...', 'somecaptions-wpclient')) . '</span>");
+										$("#verification-status").html("<span style=\'color:blue\'>' . esc_js(__('Verifying...', 'somecaptions-client')) . '</span>");
 										
 										$.ajax({
 											url: ajaxurl,
@@ -91,7 +91,7 @@
 											data: {
 												action: "somecaptions_verify_domain",
 												verification_code: verification_code,
-												nonce: "' . wp_create_nonce('somecaptions-wpclient-verify-domain') . '"
+												nonce: "' . wp_create_nonce('somecaptions-client-verify-domain') . '"
 											},
 											success: function(response) {
 												if (response.success) {
@@ -104,7 +104,7 @@
 												}
 											},
 											error: function() {
-												$("#verification-status").html("<span style=\'color:red\'>' + esc_js(__('Verification failed. Please try again.', 'somecaptions-wpclient')) + '</span>");
+												$("#verification-status").html("<span style=\'color:red\'>' + esc_js(__('Verification failed. Please try again.', 'somecaptions-client')) + '</span>");
 											}
 										});
 									});
@@ -115,7 +115,7 @@
 					)
 				);
 			}
-			cmb2_metabox_form( 'somecaptions-wpclient' . '_options', 'somecaptions-wpclient' . '-settings' );
+			cmb2_metabox_form( 'somecaptions-client' . '_options', 'somecaptions-client' . '-settings' );
 			?>
 			<?php if( $initialized ):?>
 				<br />
@@ -127,9 +127,9 @@
 			<br />
 			<p>
 				<?php if( !$gsc_connected && $initialized ):?>
-						<?php esc_html_e('GSC is not connected.', 'somecaptions-wpclient'); ?>
+						<?php esc_html_e('GSC is not connected.', 'somecaptions-client'); ?>
 				<?php elseif( $gsc_connected && $initialized ):?>
-						<?php esc_html_e('GSC is connected.', 'somecaptions-wpclient'); ?>
+						<?php esc_html_e('GSC is connected.', 'somecaptions-client'); ?>
 				<?php endif;?>
 			</p>
 		</div>

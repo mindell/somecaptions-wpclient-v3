@@ -19,9 +19,9 @@
 
 	<?php
 	// Get settings and status
-	$api_key = cmb2_get_option('somecaptions-wpclient' . '-settings', 'api_key', '');
-	$domain_verified = get_option('somecaptions-wpclient' . '-domain-verified', false);
-	$initialized = get_option('somecaptions-wpclient' . '-init');
+	$api_key = cmb2_get_option('somecaptions-client' . '-settings', 'api_key', '');
+	$domain_verified = get_option('somecaptions-client' . '-domain-verified', false);
+	$initialized = get_option('somecaptions-client' . '-init');
 	?>
 
 	<!-- Add tab navigation -->

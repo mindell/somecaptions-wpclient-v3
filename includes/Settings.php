@@ -25,7 +25,7 @@ class Settings{
 		\add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
 		$realpath        = (string) \realpath( \dirname( __FILE__ ) );
-		$plugin_basename = \plugin_basename( \plugin_dir_path( $realpath ) . 'somecaptions-wpclient' . '.php' );
+		$plugin_basename = \plugin_basename( \plugin_dir_path( $realpath ) . 'somecaptions-client' . '.php' );
 		\add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
     }
 
@@ -38,9 +38,9 @@ class Settings{
 	public function add_plugin_admin_menu() {
 		/*
 		 * Add a settings page for this plugin to the main menu
-		 *
+		 * Using a more appropriate dashicon for captions/media
 		 */
-		\add_menu_page( \__( 'SoMe Captions WPClient Settings', 'somecaptions-wpclient' ), SW_NAME, 'manage_options', 'somecaptions-wpclient', array( $this, 'display_plugin_admin_page' ), 'dashicons-hammer', 90 );
+		\add_menu_page( \__( 'SoMe Captions Client Settings', 'somecaptions-client' ), SW_NAME, 'manage_options', 'somecaptions-client', array( $this, 'display_plugin_admin_page' ), 'dashicons-format-gallery', 90 );
 	}
 
     /**
@@ -50,7 +50,8 @@ class Settings{
 	 * @return void
 	 */
 	public function display_plugin_admin_page() {
-		include_once SW_PLUGIN_ROOT . 'backend/views/admin.php';
+		// Use the new modern admin template
+		include_once SW_PLUGIN_ROOT . 'backend/views/admin-template.php';
 	}
 
     /**
@@ -63,7 +64,7 @@ class Settings{
 	public function add_action_links( array $links ) {
 		return \array_merge(
 			array(
-				'settings' => '<a href="' . \admin_url( 'options-general.php?page=' . 'somecaptions-wpclient' ) . '">' . \__( 'Settings', 'somecaptions-wpclient' ) . '</a>',
+				'settings' => '<a href="' . \admin_url( 'options-general.php?page=' . 'somecaptions-client' ) . '">' . \esc_html__( 'Settings', 'somecaptions-client' ) . '</a>',
 			),
 			$links
 		);

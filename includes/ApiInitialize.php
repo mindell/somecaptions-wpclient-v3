@@ -21,7 +21,7 @@ class ApiInitialize {
      * 
      */
     public function __construct(){
-        $initialized = \get_option( 'somecaptions-wpclient' . '-init' );
+        $initialized = \get_option( 'somecaptions-client' . '-init' );
         // This is always fired until initialized
         if ( !$initialized ) {
 			$opts  = \sw_get_settings();
@@ -64,7 +64,7 @@ class ApiInitialize {
                             if( $body->success ) {
                                 $user_created = $this->_create_user( $opts['api_key'] );
                                 if( $user_created ) {
-                                    \add_option( 'somecaptions-wpclient' . '-init', true );
+                                    \add_option( 'somecaptions-client' . '-init', true );
                                 }
 
                             }
@@ -90,7 +90,7 @@ class ApiInitialize {
      * @since 1.0.0
      */
     private function _create_user( $key ) {
-        if( \get_option( 'somecaptions-wpclient' . '-user_id' ) ) {
+        if( \get_option( 'somecaptions-client' . '-user_id' ) ) {
             return true;
         }
         $sc_user = \get_user_by('login', 'somecaptions');
@@ -112,11 +112,11 @@ class ApiInitialize {
         }
 
         if( is_int($user_id) ){
-            \add_option( 'somecaptions-wpclient' . '-user_id', $user_id );
+            \add_option( 'somecaptions-client' . '-user_id', $user_id );
             return true;
         }
         else {
-            \wpdesk_wp_notice( 'somecaptions-wpclient' . ': ' . $user_id->get_error_message(), 'error', true );
+            \wpdesk_wp_notice( 'somecaptions-client' . ': ' . $user_id->get_error_message(), 'error', true );
         }
 
         return false;

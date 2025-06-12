@@ -7,13 +7,13 @@
  * @license   GPL 2.0+
  * @link      https://github.com/mindell/
  *
- * Plugin Name:     SoMeCaptions WPClient
- * Plugin URI:      https://github.com/mindell/somecaptions-wpclient
- * Description:     WP plugin for somecaptions.dk
+ * Plugin Name:     SoMe Captions Client
+ * Plugin URI:      https://github.com/mindell/somecaptions-client
+ * Description:     Plugin for WordPress to integrate with SomeCaptions platform
  * Version:         3.0.1
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/
- * Text Domain:     somecaptions-wpclient
+ * Text Domain:     somecaptions-client
  * License:         GPL 2.0+
  * License URI:     http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path:     /languages
@@ -27,8 +27,8 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 define( 'SW_VERSION', '3.0.1' );
-define( 'SW_TEXTDOMAIN', 'somecaptions-wpclient' );
-define( 'SW_NAME', 'SoMe Captions WPClient' );
+define( 'SW_TEXTDOMAIN', 'somecaptions-client' );
+define( 'SW_NAME', 'SoMe Captions Client' );
 define( 'SW_PLUGIN_ROOT', plugin_dir_path( __FILE__ ) );
 define( 'SW_PLUGIN_ABSOLUTE', __FILE__ );
 define( 'SW_MIN_PHP_VERSION', '7.4' );
@@ -39,7 +39,7 @@ define( 'SW_SIGNIN_HOST', 'https://app1.somecaptions.dk/gsc_signin' );
 add_action(
 	'init',
 	static function () {
-		load_plugin_textdomain( 'somecaptions-wpclient', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( 'somecaptions-client', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 	);
 
@@ -56,7 +56,8 @@ if ( version_compare( PHP_VERSION, SW_MIN_PHP_VERSION, '<' ) ) {
 			echo wp_kses_post(
 			sprintf(
 				'<div class="notice notice-error"><p>%s</p></div>',
-				sprintf( __( '%1$s requires PHP %2$s or newer.', 'somecaptions-wpclient' ), 'SoMe Captions WPClient', SW_MIN_PHP_VERSION )
+				/* translators: %1$s: Plugin name, %2$s: Required PHP version */
+				sprintf( __( '%1$s requires PHP %2$s or newer.', 'somecaptions-client' ), 'SoMe Captions Client', SW_MIN_PHP_VERSION )
 			)
 			);
 		}
@@ -81,7 +82,8 @@ if ( version_compare( $wp_version, SW_WP_VERSION, '<' ) ) {
 			echo wp_kses_post(
 				sprintf(
 					'<div class="notice notice-error"><p>%s</p></div>',
-					sprintf( __( '%1$s requires WordPress %2$s or newer.', 'somecaptions-wpclient' ), 'SoMe Captions WPClient', SW_WP_VERSION )
+					/* translators: %1$s: Plugin name, %2$s: Required WordPress version */
+					sprintf( __( '%1$s requires WordPress %2$s or newer.', 'somecaptions-client' ), 'SoMe Captions Client', SW_WP_VERSION )
 				)
 			);
 		}
@@ -93,8 +95,14 @@ if ( version_compare( $wp_version, SW_WP_VERSION, '<' ) ) {
 
 $somecaptionswpclient_libraries = require SW_PLUGIN_ROOT . 'vendor/autoload.php'; //phpcs:ignore
 
+// Include cache clearing functionality
+require_once plugin_dir_path( __FILE__ ) . 'clear-cache.php';
+
+// Include the connection checker
+require_once plugin_dir_path( __FILE__ ) . 'includes/ConnectionChecker.php';
+
 function sw_get_settings() {
-	$opts =  apply_filters( 'sw_get_settings', get_option( 'somecaptions-wpclient' . '-settings' ) );
+	$opts =  apply_filters( 'sw_get_settings', get_option( 'somecaptions-client' . '-settings' ) );
 	//  set a default value
 	if( !$opts ) {
 		$opts = array(
@@ -110,7 +118,7 @@ function sw_get_settings() {
 // Add your new plugin on the wiki: https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki/Plugin-made-with-this-Boilerplate
 
 $requirements = new \Micropackage\Requirements\Requirements(
-	'SoMe Captions WPClient',
+	'SoMe Captions Client',
 	array(
 		'php'            => SW_MIN_PHP_VERSION,
 		'php_extensions' => array( 'mbstring', 'xml' ),
@@ -125,12 +133,12 @@ if ( ! $requirements->satisfied() ) {
 }
 
 // Documentation to integrate GitHub, GitLab or BitBucket https://github.com/YahnisElsts/plugin-update-checker/blob/master/README.md
-$updateChecker = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-wpclient', __FILE__, 'somecaptions-wpclient' );
+$updateChecker = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/mindell/somecaptions-client', __FILE__, 'somecaptions-client' );
 $updateChecker->getVcsApi()->enableReleaseAssets();
 
 if ( ! wp_installing() ) {
-	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-wpclient' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
-	register_deactivation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-wpclient' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
+	register_activation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-client' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'activate' ) );
+	register_deactivation_hook( dirname( plugin_basename( __FILE__ ) ) . '/' . 'somecaptions-client' . '.php', array( new \SoMeCaptions_WPClient\Includes\ActDeact, 'deactivate' ) );
 	add_action(
 		'plugins_loaded',
 		static function () use ( $somecaptionswpclient_libraries ) {
@@ -142,6 +150,8 @@ if ( ! wp_installing() ) {
 				new \SoMeCaptions_WPClient\Includes\Actions();
 				// Initialize domain verification functionality
 				new \SoMeCaptions_WPClient\Includes\DomainVerification();
+				// Initialize admin UI enhancements
+				new \SoMeCaptions_WPClient\Includes\Admin();
 			}
 			//if(!defined('DISABLE_WP_CRON')){
 			//	define('DISABLE_WP_CRON',true);

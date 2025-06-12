@@ -1,0 +1,228 @@
+/**
+ * SoMe Captions Client - Help & Support Styles
+ */
+
+.somecaptions-help-section {
+    margin-bottom: 2rem;
+}
+
+.somecaptions-help-section h2 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--somecaptions-border-color, #e2e4e7);
+    color: var(--somecaptions-primary-color, #2271b1);
+}
+
+.somecaptions-help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.somecaptions-help-card {
+    background: #fff;
+    border: 1px solid var(--somecaptions-border-color, #e2e4e7);
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.somecaptions-help-card:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.somecaptions-help-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    color: var(--somecaptions-text-color, #1d2327);
+}
+
+.somecaptions-help-card h3 .dashicons {
+    margin-right: 0.5rem;
+    color: var(--somecaptions-primary-color, #2271b1);
+}
+
+.somecaptions-help-card p {
+    margin-bottom: 1rem;
+    color: var(--somecaptions-text-secondary, #50575e);
+}
+
+.somecaptions-help-card .somecaptions-button {
+    margin-top: 0.5rem;
+}
+
+/* Getting Started Steps */
+.somecaptions-steps {
+    counter-reset: step-counter;
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.somecaptions-steps li {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1rem;
+    counter-increment: step-counter;
+}
+
+.somecaptions-steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    background-color: var(--somecaptions-primary-color, #2271b1);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.somecaptions-steps li strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--somecaptions-text-color, #1d2327);
+}
+
+/* Troubleshooting Accordion */
+.somecaptions-accordion {
+    margin-bottom: 1rem;
+    border: 1px solid var(--somecaptions-border-color, #e2e4e7);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.somecaptions-accordion-header {
+    background-color: #f8f9fa;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+}
+
+.somecaptions-accordion-header:hover {
+    background-color: #f0f0f1;
+}
+
+.somecaptions-accordion-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.somecaptions-accordion-header h3 .dashicons {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.somecaptions-accordion-header .dashicons-arrow-down,
+.somecaptions-accordion-header .dashicons-arrow-up {
+    transition: transform 0.2s ease;
+}
+
+.somecaptions-accordion-content {
+    padding: 1rem;
+    background-color: white;
+    display: none;
+}
+
+.somecaptions-accordion.open .somecaptions-accordion-header {
+    border-bottom: 1px solid var(--somecaptions-border-color, #e2e4e7);
+}
+
+.somecaptions-accordion.open .somecaptions-accordion-content {
+    display: block;
+}
+
+/* System Information */
+.somecaptions-system-info {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.somecaptions-system-info h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.somecaptions-system-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.somecaptions-system-info-table th,
+.somecaptions-system-info-table td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--somecaptions-border-color, #e2e4e7);
+}
+
+.somecaptions-system-info-table th {
+    width: 30%;
+    font-weight: 600;
+}
+
+#copy-system-info {
+    margin-top: 0.5rem;
+}
+
+/* Dark mode support */
+.somecaptions-dark-mode .somecaptions-help-card,
+.somecaptions-dark-mode .somecaptions-accordion-content {
+    background-color: var(--somecaptions-dark-bg, #1e1e1e);
+    border-color: var(--somecaptions-dark-border, #3c434a);
+}
+
+.somecaptions-dark-mode .somecaptions-accordion-header {
+    background-color: var(--somecaptions-dark-bg-light, #2c2c2c);
+}
+
+.somecaptions-dark-mode .somecaptions-accordion-header:hover {
+    background-color: var(--somecaptions-dark-bg-hover, #383838);
+}
+
+.somecaptions-dark-mode .somecaptions-system-info {
+    background-color: var(--somecaptions-dark-bg-light, #2c2c2c);
+}
+
+.somecaptions-dark-mode .somecaptions-help-section h2,
+.somecaptions-dark-mode .somecaptions-help-card h3,
+.somecaptions-dark-mode .somecaptions-accordion-header h3,
+.somecaptions-dark-mode .somecaptions-system-info h3 {
+    color: var(--somecaptions-dark-text, #f0f0f1);
+}
+
+.somecaptions-dark-mode .somecaptions-help-card p,
+.somecaptions-dark-mode .somecaptions-steps li,
+.somecaptions-dark-mode .somecaptions-accordion-content,
+.somecaptions-dark-mode .somecaptions-system-info-table {
+    color: var(--somecaptions-dark-text-secondary, #bbb);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 782px) {
+    .somecaptions-help-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .somecaptions-system-info-table th {
+        width: 40%;
+    }
+}

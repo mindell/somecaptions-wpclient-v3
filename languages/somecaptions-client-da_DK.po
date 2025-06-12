@@ -1,0 +1,501 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SoMe Captions Client 3.0.1\n"
+"Report-Msgid-Bugs-To: https://github.com/mindell/somecaptions-client/issues\n"
+"POT-Creation-Date: 2025-06-11T12:00:00+00:00\n"
+"PO-Revision-Date: 2025-06-15T14:30:00+00:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: da_DK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Manual\n"
+"X-Domain: somecaptions-client\n"
+
+#: somecaptions-client.php:55
+msgid "%1$s requires PHP %2$s or newer."
+msgstr "%1$s kræver PHP %2$s eller nyere."
+
+#: somecaptions-client.php:82
+msgid "%1$s requires WordPress %2$s or newer."
+msgstr "%1$s kræver WordPress %2$s eller nyere."
+
+#: includes/Settings.php:42
+msgid "SoMe Captions Client Settings"
+msgstr "SoMe Captions Client Indstillinger"
+
+#: includes/Settings.php:64
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: includes/Admin.php:88
+msgid "Saving..."
+msgstr "Gemmer..."
+
+#: includes/Admin.php:89
+msgid "Settings saved successfully"
+msgstr "Indstillinger gemt med succes"
+
+#: includes/Admin.php:90
+msgid "An error occurred"
+msgstr "Der opstod en fejl"
+
+#: includes/Admin.php:91
+msgid "Verifying domain..."
+msgstr "Verificerer domæne..."
+
+#: includes/Admin.php:92
+msgid "Domain verified successfully"
+msgstr "Domæne verificeret med succes"
+
+#: includes/Admin.php:93
+msgid "Domain verification failed"
+msgstr "Domæne verificering mislykkedes"
+
+#: includes/Admin.php:94
+msgid "Are you sure you want to reset all settings? This cannot be undone."
+msgstr "Er du sikker på, at du vil nulstille alle indstillinger? Dette kan ikke fortrydes."
+
+#: includes/Admin.php:95
+msgid "Please enter a verification code"
+msgstr "Indtast venligst en verifikationskode"
+
+#: includes/Admin.php:96
+msgid "API connection successful"
+msgstr "API-forbindelse oprettet med succes"
+
+#: includes/Admin.php:97
+msgid "API connection failed"
+msgstr "API-forbindelse mislykkedes"
+
+#: includes/Admin.php:98
+msgid "Settings saved"
+msgstr "Indstillinger gemt"
+
+#: includes/Admin.php:99
+msgid "Saving settings..."
+msgstr "Gemmer indstillinger..."
+
+#: includes/Admin.php:100
+msgid "Validating API connection..."
+msgstr "Validerer API-forbindelse..."
+
+#: backend/views/admin-template.php:30
+msgid "General Settings"
+msgstr "Generelle Indstillinger"
+
+#: backend/views/admin-template.php:37
+msgid "Domain Verification"
+msgstr "Domæne Verifikation"
+
+#: backend/views/admin-template.php:44
+msgid "Help & Support"
+msgstr "Hjælp & Support"
+
+#: backend/views/admin-template.php:67
+msgid "API Status"
+msgstr "API Status"
+
+#: backend/views/admin-template.php:71
+msgid "Connected"
+msgstr "Forbundet"
+
+#: backend/views/admin-template.php:73
+msgid "Not Connected"
+msgstr "Ikke Forbundet"
+
+#: backend/views/admin-template.php:82
+msgid "Domain Status"
+msgstr "Domæne Status"
+
+#: backend/views/admin-template.php:86
+msgid "Verified"
+msgstr "Verificeret"
+
+#: backend/views/admin-template.php:88
+msgid "Not Verified"
+msgstr "Ikke Verificeret"
+
+#: backend/views/settings-general-modern.php:26
+msgid "API Configuration"
+msgstr "API Konfiguration"
+
+#: backend/views/settings-general-modern.php:29
+msgid "Enter your SoMe Captions API credentials below to connect your WordPress site."
+msgstr "Indtast dine SoMe Captions API-legitimationsoplysninger nedenfor for at forbinde dit WordPress-websted."
+
+#: backend/views/settings-general-modern.php:48
+msgid "API Endpoint"
+msgstr "API Endpoint"
+
+#: backend/views/settings-general-modern.php:49
+msgid "The URL of the SoMe Captions API service."
+msgstr "URL'en til SoMe Captions API-tjenesten."
+
+#: backend/views/settings-general-modern.php:59
+msgid "API Key"
+msgstr "API Nøgle"
+
+#: backend/views/settings-general-modern.php:60
+msgid "Your unique API key for accessing SoMe Captions services."
+msgstr "Din unikke API-nøgle til adgang til SoMe Captions-tjenester."
+
+#: backend/views/settings-general-modern.php:72
+msgid "Save Settings"
+msgstr "Gem Indstillinger"
+
+#: backend/views/settings-domain-modern.php:26
+msgid "Domain Verification"
+msgstr "Domæne Verifikation"
+
+#: backend/views/settings-domain-modern.php:29
+msgid "Verify your domain to ensure secure communication with SoMe Captions services."
+msgstr "Verificer dit domæne for at sikre sikker kommunikation med SoMe Captions-tjenester."
+
+#: backend/views/settings-domain-modern.php:48
+msgid "Verification Code"
+msgstr "Verifikationskode"
+
+#: backend/views/settings-domain-modern.php:49
+msgid "Enter the verification code provided in your SoMe Captions dashboard."
+msgstr "Indtast verifikationskoden, der er angivet i dit SoMe Captions-dashboard."
+
+#: backend/views/settings-domain-modern.php:59
+msgid "Verify Domain"
+msgstr "Verificer Domæne"
+
+#: backend/views/settings-domain-modern.php:73
+msgid "Why Verify Your Domain?"
+msgstr "Hvorfor verificere dit domæne?"
+
+#: backend/views/settings-domain-modern.php:76
+msgid "Domain verification helps ensure that only authorized websites can access your SoMe Captions account and API key."
+msgstr "Domæneverificering hjælper med at sikre, at kun autoriserede websteder kan få adgang til din SoMe Captions-konto og API-nøgle."
+
+#: backend/views/settings-domain-modern.php:82
+msgid "Enhanced Security"
+msgstr "Forbedret Sikkerhed"
+
+#: backend/views/settings-domain-modern.php:83
+msgid "Prevents unauthorized use of your API key on other domains."
+msgstr "Forhindrer uautoriseret brug af din API-nøgle på andre domæner."
+
+#: backend/views/settings-domain-modern.php:89
+msgid "Better Performance"
+msgstr "Bedre Ydeevne"
+
+#: backend/views/settings-domain-modern.php:90
+msgid "Verified domains get priority processing and higher rate limits."
+msgstr "Verificerede domæner får prioriteret behandling og højere ratelimits."
+
+#: backend/views/settings-domain-modern.php:96
+msgid "Access to All Features"
+msgstr "Adgang til Alle Funktioner"
+
+#: backend/views/settings-domain-modern.php:97
+msgid "Some advanced features are only available to verified domains."
+msgstr "Nogle avancerede funktioner er kun tilgængelige for verificerede domæner."
+
+#: backend/views/settings-help-modern.php:21
+msgid "Getting Started"
+msgstr "Kom i gang"
+
+#: backend/views/settings-help-modern.php:24
+msgid "New to SoMe Captions? Follow these steps to get started:"
+msgstr "Ny til SoMe Captions? Følg disse trin for at komme i gang:"
+
+#: backend/views/settings-help-modern.php:28
+msgid "Create an Account"
+msgstr "Opret en konto"
+
+#: backend/views/settings-help-modern.php:29
+msgid "Sign up for a SoMe Captions account at <a href=\"https://somecaptions.dk/signup\" target=\"_blank\">somecaptions.dk</a>"
+msgstr "Tilmeld dig en SoMe Captions-konto på <a href=\"https://somecaptions.dk/signup\" target=\"_blank\">somecaptions.dk</a>"
+
+#: backend/views/settings-help-modern.php:32
+msgid "Get Your API Key"
+msgstr "Få din API-nøgle"
+
+#: backend/views/settings-help-modern.php:33
+msgid "Generate an API key from your SoMe Captions dashboard"
+msgstr "Generer en API-nøgle fra dit SoMe Captions-dashboard"
+
+#: backend/views/settings-help-modern.php:36
+msgid "Configure the Plugin"
+msgstr "Konfigurer plugin'et"
+
+#: backend/views/settings-help-modern.php:37
+msgid "Enter your API key in the General Settings tab"
+msgstr "Indtast din API-nøgle i fanen Generelle indstillinger"
+
+#: backend/views/settings-help-modern.php:40
+msgid "Verify Your Domain"
+msgstr "Verificer dit domæne"
+
+#: backend/views/settings-help-modern.php:41
+msgid "Complete domain verification for enhanced security and features"
+msgstr "Fuldfør domæneverificering for forbedret sikkerhed og funktioner"
+
+#: backend/views/settings-help-modern.php:51
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: backend/views/settings-help-modern.php:54
+msgid "Access comprehensive documentation to learn how to use all features of SoMe Captions:"
+msgstr "Få adgang til omfattende dokumentation for at lære at bruge alle funktioner i SoMe Captions:"
+
+#: backend/views/settings-help-modern.php:59
+msgid "Plugin Documentation"
+msgstr "Plugin dokumentation"
+
+#: backend/views/settings-help-modern.php:63
+msgid "API Reference"
+msgstr "API reference"
+
+#: backend/views/settings-help-modern.php:67
+msgid "Video Tutorials"
+msgstr "Videoguider"
+
+#: backend/views/settings-help-modern.php:71
+msgid "Frequently Asked Questions"
+msgstr "Ofte stillede spørgsmål"
+
+#: backend/views/settings-help-modern.php:81
+msgid "Troubleshooting"
+msgstr "Fejlfinding"
+
+#: backend/views/settings-help-modern.php:86
+msgid "API Connection Issues"
+msgstr "Problemer med API-forbindelse"
+
+#: backend/views/settings-help-modern.php:90
+msgid "Verify your API key is entered correctly"
+msgstr "Bekræft, at din API-nøgle er indtastet korrekt"
+
+#: backend/views/settings-help-modern.php:91
+msgid "Check that your domain is properly verified"
+msgstr "Kontroller, at dit domæne er korrekt verificeret"
+
+#: backend/views/settings-help-modern.php:92
+msgid "Ensure your server can make outbound HTTP requests"
+msgstr "Sørg for, at din server kan foretage udgående HTTP-anmodninger"
+
+#: backend/views/settings-help-modern.php:93
+msgid "Confirm your SoMe Captions subscription is active"
+msgstr "Bekræft, at dit SoMe Captions-abonnement er aktivt"
+
+#: backend/views/settings-help-modern.php:99
+msgid "Plugin Conflicts"
+msgstr "Plugin-konflikter"
+
+#: backend/views/settings-help-modern.php:102
+msgid "If you experience conflicts with other plugins:"
+msgstr "Hvis du oplever konflikter med andre plugins:"
+
+#: backend/views/settings-help-modern.php:104
+msgid "Temporarily deactivate other plugins to identify conflicts"
+msgstr "Deaktiver midlertidigt andre plugins for at identificere konflikter"
+
+#: backend/views/settings-help-modern.php:105
+msgid "Check for JavaScript errors in your browser console"
+msgstr "Tjek for JavaScript-fejl i din browser-konsol"
+
+#: backend/views/settings-help-modern.php:106
+msgid "Ensure your WordPress and PHP versions meet requirements"
+msgstr "Sørg for, at dine WordPress- og PHP-versioner opfylder kravene"
+
+#: backend/views/settings-help-modern.php:112
+msgid "Performance Optimization"
+msgstr "Ydeevneoptimering"
+
+#: backend/views/settings-help-modern.php:115
+msgid "For optimal performance:"
+msgstr "For optimal ydeevne:"
+
+#: backend/views/settings-help-modern.php:117
+msgid "Use a caching plugin for your WordPress site"
+msgstr "Brug et caching-plugin til dit WordPress-websted"
+
+#: backend/views/settings-help-modern.php:118
+msgid "Optimize your images before uploading them"
+msgstr "Optimer dine billeder, før du uploader dem"
+
+#: backend/views/settings-help-modern.php:119
+msgid "Consider upgrading to a higher API tier for better rate limits"
+msgstr "Overvej at opgradere til et højere API-niveau for bedre ratelimits"
+
+#: backend/views/settings-help-modern.php:129
+msgid "Contact Support"
+msgstr "Kontakt support"
+
+#: backend/views/settings-help-modern.php:132
+msgid "Need help? Our support team is ready to assist you:"
+msgstr "Brug for hjælp? Vores supportteam er klar til at hjælpe dig:"
+
+#: backend/views/settings-help-modern.php:137
+msgid "Email Support"
+msgstr "Email support"
+
+#: backend/views/settings-help-modern.php:138
+msgid "Send us an email at <a href=\"mailto:support@somecaptions.dk\">support@somecaptions.dk</a>"
+msgstr "Send os en email på <a href=\"mailto:support@somecaptions.dk\">support@somecaptions.dk</a>"
+
+#: backend/views/settings-help-modern.php:143
+msgid "Live Chat"
+msgstr "Live chat"
+
+#: backend/views/settings-help-modern.php:144
+msgid "Chat with our support team on our website during business hours"
+msgstr "Chat med vores supportteam på vores hjemmeside i åbningstiden"
+
+#: backend/views/settings-help-modern.php:146
+msgid "Start Chat"
+msgstr "Start chat"
+
+#: backend/views/settings-help-modern.php:151
+msgid "Community Forum"
+msgstr "Community forum"
+
+#: backend/views/settings-help-modern.php:152
+msgid "Join our community forum to connect with other users"
+msgstr "Tilslut dig vores community forum for at komme i kontakt med andre brugere"
+
+#: backend/views/settings-help-modern.php:154
+msgid "Visit Forum"
+msgstr "Besøg forum"
+
+#: backend/views/settings-help-modern.php:160
+msgid "System Information"
+msgstr "Systeminformation"
+
+#: backend/views/settings-help-modern.php:161
+msgid "When contacting support, please include the following information:"
+msgstr "Når du kontakter support, bedes du inkludere følgende oplysninger:"
+
+#: backend/views/settings-help-modern.php:166
+msgid "WordPress Version"
+msgstr "WordPress-version"
+
+#: backend/views/settings-help-modern.php:170
+msgid "PHP Version"
+msgstr "PHP-version"
+
+#: backend/views/settings-help-modern.php:174
+msgid "Plugin Version"
+msgstr "Plugin-version"
+
+#: backend/views/settings-help-modern.php:178
+msgid "Active Theme"
+msgstr "Aktivt tema"
+
+#: backend/views/settings-help-modern.php:183
+msgid "Copy System Info"
+msgstr "Kopiér systeminformation"
+
+#: backend/views/settings-help-modern.php:209
+msgid "System information copied to clipboard"
+msgstr "Systeminformation kopieret til udklipsholder"
+
+#: backend/views/settings-help-modern.php:214
+msgid "Failed to copy system information"
+msgstr "Kunne ikke kopiere systeminformation"
+
+#: backend/views/settings-general.php:103
+msgid "API endpoint"
+msgstr "API-endepunkt"
+
+#: backend/views/settings-general.php:113
+msgid "API key"
+msgstr "API-nøgle"
+
+#: backend/views/admin.php:29
+msgid "General Settings"
+msgstr "Generelle Indstillinger"
+
+#: backend/views/admin.php:31
+msgid "Domain Verification"
+msgstr "Domænebekræftelse"
+
+#: backend/views/settings-domain.php:29
+msgid "Verify your domain ownership to enable full integration with SoMe Captions"
+msgstr "Bekræft dit domæneejerskab for at aktivere fuld integration med SoMe Captions"
+
+#: backend/views/settings-domain.php:38
+msgid "Verification Code"
+msgstr "Bekræftelseskode"
+
+#: backend/views/settings-domain.php:40
+msgid "Enter the verification code from your SoMe Captions dashboard"
+msgstr "Indtast bekræftelseskoden fra dit SoMe Captions-dashboard"
+
+#: backend/views/settings-domain.php:59
+msgid "Verify Domain"
+msgstr "Bekræft Domæne"
+
+#: backend/views/settings-domain.php:105
+msgid "What is Domain Verification?"
+msgstr "Hvad er Domænebekræftelse?"
+
+#: backend/views/settings-domain.php:106
+msgid ""
+"\n"
+"            <p>Domain verification confirms that you own this website and allows SoMe Captions to securely connect with your WordPress site.</p>\n"
+"            <p>After verification, you'll be able to:</p>\n"
+"            <ul style=\"list-style-type: disc; margin-left: 20px;\">\n"
+"                <li>Sync content between WordPress and SoMe Captions</li>\n"
+"                <li>Automatically publish generated content</li>\n"
+"                <li>Access advanced features like category mapping</li>\n"
+"            </ul>\n"
+"        "
+msgstr ""
+"\n"
+"            <p>Domænebekræftelse bekræfter, at du ejer dette websted og giver SoMe Captions mulighed for sikkert at forbinde til dit WordPress-websted.</p>\n"
+"            <p>Efter bekræftelse vil du kunne:</p>\n"
+"            <ul style=\"list-style-type: disc; margin-left: 20px;\">\n"
+"                <li>Synkronisere indhold mellem WordPress og SoMe Captions</li>\n"
+"                <li>Automatisk udgive genereret indhold</li>\n"
+"                <li>Få adgang til avancerede funktioner som kategorikortlægning</li>\n"
+"            </ul>\n"
+"        "
+
+#: includes/Admin.php:83
+msgid "Saving..."
+msgstr "Gemmer..."
+
+#: includes/Admin.php:84
+msgid "Settings saved successfully"
+msgstr "Indstillinger gemt"
+
+#: includes/Admin.php:85
+msgid "An error occurred"
+msgstr "Der opstod en fejl"
+
+#: includes/Admin.php:86
+msgid "Verifying domain..."
+msgstr "Bekræfter domæne..."
+
+#: includes/Admin.php:87
+msgid "Domain verified successfully"
+msgstr "Domæne bekræftet"
+
+#: includes/Admin.php:88
+msgid "Domain verification failed"
+msgstr "Domænebekræftelse mislykkedes"
+
+#: includes/Admin.php:89
+msgid "Are you sure you want to reset all settings? This cannot be undone."
+msgstr "Er du sikker på, at du vil nulstille alle indstillinger? Dette kan ikke fortrydes."
+
+#: backend/views/settings-domain.php:65
+msgid "Please enter a verification code"
+msgstr "Indtast venligst en bekræftelseskode"
+
+#: backend/views/settings-domain.php:68
+msgid "Verifying..."
+msgstr "Bekræfter..."
+
+#: backend/views/settings-domain.php:94
+msgid "Verification failed. Please try again."
+msgstr "Bekræftelse mislykkedes. Prøv venligst igen."

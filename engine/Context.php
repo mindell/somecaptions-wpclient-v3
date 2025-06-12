@@ -15,7 +15,7 @@ namespace SoMeCaptions_WPClient\Engine;
 use Inpsyde\WpContext;
 
 /**
- * SoMeCaptions WPClient Is Methods
+ * SoMe Captions Client Is Methods
  */
 class Context {
 
