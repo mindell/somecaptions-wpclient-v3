@@ -287,7 +287,7 @@ class ApiClient{
 				}
 				
 				// Display the error message
-				\wpdesk_wp_notice( esc_html( 'SoMe Captions Client: ' . $message ), 'error', true );
+				// \wpdesk_wp_notice( esc_html( 'SoMe Captions Client: ' . $message ), 'error', true );
 			}
 		}
 

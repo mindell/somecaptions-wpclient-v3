@@ -73,9 +73,17 @@ $domain_verified = get_option('somecaptions-client' . '-domain-verified', false)
                 );
                 
                 // Render the form without submit button
-                // Using show_form() instead of render_form() which is the correct method
-                $domain_cmb->show_form('somecaptions-client' . '_domain_verification', array(
-                    'save_button' => false, // Remove the Save button
+                // Add CSS to hide the submit button
+                echo '<style>
+                    #somecaptions-client_domain_verification .button-primary[name="submit-cmb"] {
+                        display: none !important;
+                    }
+                </style>';
+                
+                // Use cmb2_metabox_form with correct parameters
+                // First parameter is the metabox ID, second is the object ID (for options page)
+                cmb2_metabox_form('somecaptions-client' . '_domain_verification', 'somecaptions-client' . '-settings', array(
+                    'save_button' => ' ', // Empty space to make button invisible (backup for CSS)
                 ));
                 ?>
                 
@@ -86,12 +94,7 @@ $domain_verified = get_option('somecaptions-client' . '-domain-verified', false)
                     <div id="verification-status" class="somecaptions-verification-status" style="display: none;"></div>
                 </div>
                 
-                <div class="somecaptions-loading-overlay">
-                    <div class="somecaptions-spinner">
-                        <div class="somecaptions-spinner-icon"></div>
-                        <p class="somecaptions-spinner-text"><?php esc_html_e('Verifying domain...', 'somecaptions-client'); ?></p>
-                    </div>
-                </div>
+                
             </div>
         <?php endif; ?>
     </div>

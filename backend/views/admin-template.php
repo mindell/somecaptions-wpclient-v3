@@ -17,10 +17,14 @@ if (!defined('ABSPATH')) {
 }
 
 // Get settings and status
-$api_key = cmb2_get_option('somecaptions-client' . '-settings', 'api_key', '');
+$settings = sw_get_settings();
+$api_key = isset($settings['api_key']) ? $settings['api_key'] : '';
 $domain_verified = get_option('somecaptions-client' . '-domain-verified', false);
 $initialized = get_option('somecaptions-client' . '-init');
 $is_connected = get_option('somecaptions-client-connected', false);
+
+// We must rely on the connection status option which is updated by API responses
+// This ensures we only consider a connection valid when the API has confirmed it
 
 // Define logo URL
 $logo_url = plugin_dir_url(SW_PLUGIN_ABSOLUTE) . 'assets/images/somecaptions-logo.png';
@@ -82,7 +86,12 @@ $logo_exists = file_exists(plugin_dir_path(SW_PLUGIN_ABSOLUTE) . 'assets/images/
                 <div>
                     <h3 class="somecaptions-status-title"><?php esc_html_e('Connection Status', 'somecaptions-client'); ?></h3>
                     <div class="somecaptions-status-details">
-                        <?php if ($domain_verified) : ?>
+                        <?php if (!$is_connected) : ?>
+                            <span class="somecaptions-status somecaptions-status-error">
+                                <span class="somecaptions-status-icon">✕</span>
+                                <?php esc_html_e('Not Connected', 'somecaptions-client'); ?>
+                            </span>
+                        <?php elseif ($domain_verified) : ?>
                             <span class="somecaptions-status somecaptions-status-success">
                                 <span class="somecaptions-status-icon">✓</span>
                                 <?php esc_html_e('Connected & Verified', 'somecaptions-client'); ?>
@@ -95,7 +104,7 @@ $logo_exists = file_exists(plugin_dir_path(SW_PLUGIN_ABSOLUTE) . 'assets/images/
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php if (!$domain_verified && !empty($api_key)) : ?>
+                <?php if ($is_connected && !$domain_verified) : ?>
                     <div class="somecaptions-status-actions">
                         <a href="#domain-verification" class="somecaptions-button somecaptions-button-primary somecaptions-nav-tab-trigger" data-tab="domain-verification">
                             <?php esc_html_e('Verify Domain', 'somecaptions-client'); ?>
@@ -140,7 +149,11 @@ $logo_exists = file_exists(plugin_dir_path(SW_PLUGIN_ABSOLUTE) . 'assets/images/
                     </div>
                     <div class="somecaptions-card-body">
                         <div class="somecaptions-notice somecaptions-notice-warning">
-                            <p><?php esc_html_e('Please connect your API key in the General Settings tab before verifying your domain.', 'somecaptions-client'); ?></p>
+                            <?php if (empty($api_key)) : ?>
+                                <p><?php esc_html_e('Please enter your API key in the General Settings tab before verifying your domain.', 'somecaptions-client'); ?></p>
+                            <?php else : ?>
+                                <p><?php esc_html_e('Your API key is not connected. Please check that your API key is valid and try again.', 'somecaptions-client'); ?></p>
+                            <?php endif; ?>
                         </div>
                         
                         <div class="somecaptions-form-section">

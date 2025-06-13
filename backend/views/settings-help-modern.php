@@ -26,7 +26,7 @@ if (!defined('ABSPATH')) {
             <ol class="somecaptions-steps">
                 <li>
                     <strong><?php esc_html_e('Create an Account', 'somecaptions-client'); ?></strong>
-                    <p><?php echo wp_kses_post( __('Sign up for a SoMe Captions account at <a href="https://somecaptions.dk/signup" target="_blank">somecaptions.dk</a>', 'somecaptions-client') ); ?></p>
+                    <p><?php echo wp_kses_post( __('Sign up for a SoMe Captions account at <a href="https://somecaptions.dk/sign-up" target="_blank">somecaptions.dk</a>', 'somecaptions-client') ); ?></p>
                 </li>
                 <li>
                     <strong><?php esc_html_e('Get Your API Key', 'somecaptions-client'); ?></strong>
@@ -44,7 +44,7 @@ if (!defined('ABSPATH')) {
         </div>
     </div>
 
-    <!-- Documentation Card -->
+    <!-- Documentation Card
     <div class="somecaptions-card">
         <div class="somecaptions-card-header">
             <h3><span class="dashicons dashicons-book"></span> <?php esc_html_e('Documentation', 'somecaptions-client'); ?></h3>
@@ -72,7 +72,8 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     </div>
-
+     -->
+    
     <!-- Troubleshooting Card -->
     <div class="somecaptions-card">
         <div class="somecaptions-card-header">
@@ -125,8 +126,8 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     </div>
-
-    <!-- Support Card -->
+   
+    <!-- Support Card 
     <div class="somecaptions-card">
         <div class="somecaptions-card-header">
             <h3><span class="dashicons dashicons-businesswoman"></span> <?php esc_html_e('Contact Support', 'somecaptions-client'); ?></h3>
@@ -191,6 +192,7 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     </div>
+    -->
 </div>
 
 <script>

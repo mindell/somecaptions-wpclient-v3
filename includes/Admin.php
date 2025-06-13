@@ -67,8 +67,7 @@ class Admin {
         $script_version = SW_VERSION . '-' . time();
 
         // Enqueue admin scripts
-        // We're replacing the old tab navigation with a new, more robust implementation
-        /* Commenting out the old tab navigation script
+        // Using the new admin scripts file
         wp_enqueue_script(
             'somecaptions-admin-scripts',
             plugin_dir_url(SW_PLUGIN_ABSOLUTE) . 'assets/js/admin-scripts-new.js',
@@ -76,7 +75,6 @@ class Admin {
             $script_version,
             true
         );
-        */
         
         // Enqueue our new tab navigation script
         wp_enqueue_script(
@@ -135,13 +133,13 @@ class Admin {
             return;
         }
         
-        // Localize the script with data
+        // Localize admin scripts
         wp_localize_script(
             'somecaptions-admin-scripts',
             'somecaptions_admin',
             array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('somecaptions_admin_nonce'),
+                'nonce' => wp_create_nonce('somecaptions_save_settings'),
                 'i18n' => array(
                     'saving' => esc_js(__('Saving...', 'somecaptions-client')),
                     'saved' => esc_js(__('Settings saved successfully', 'somecaptions-client')),

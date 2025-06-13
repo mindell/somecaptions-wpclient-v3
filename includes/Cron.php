@@ -95,9 +95,7 @@ class Cron{
                         }
                     }
                     $post_name = \sanitize_title( $article->title );
-                    if($article->post_name) {
-                        $post_name = \sanitize_title( $article->post_name );
-                    }
+                    
                     $post_arg = array(
                         'post_type'     => $article->type,
                         'post_status'   => 'publish',

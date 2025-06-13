@@ -9,7 +9,7 @@
  *
  * Plugin Name:     SoMe Captions Client
  * Plugin URI:      https://github.com/mindell/somecaptions-client
- * Description:     Plugin for WordPress to integrate with SomeCaptions platform
+ * Description:     Plugin for WordPress to integrate with SoMe Captions platform
  * Version:         3.0.1
  * Author:          Mindell
  * Author URI:      https://github.com/mindell/

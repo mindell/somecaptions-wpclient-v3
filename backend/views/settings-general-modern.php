@@ -78,8 +78,46 @@ $endpoint = isset($settings['endpoint']) ? $settings['endpoint'] : 'https://api.
                 )
             );
             
-            // Render the form
-            cmb2_metabox_form('somecaptions-client' . '_options', 'somecaptions-client' . '-settings');
+            // Add CSS to hide the default CMB2 submit button
+            echo '<style>
+                #somecaptions-client_options .button-primary[name="submit-cmb"] {
+                    display: none !important;
+                }
+                .somecaptions-form-actions {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+                .somecaptions-form-wrapper {
+                    position: relative;
+                }
+            </style>';
+            
+            // Debug output to check form structure
+            echo '<!-- DEBUG: Form structure will be modified with ID somecaptions-client-settings-form -->';
+            
+            // Add a custom ID to the form for JavaScript targeting
+            add_filter('cmb2_form_attributes', function($attrs) {
+                $attrs['id'] = 'somecaptions-client-settings-form';
+                $attrs['class'] .= ' somecaptions-ajax-form';
+                // Debug output of attributes
+                echo '<!-- DEBUG: Form attributes: ' . print_r($attrs, true) . ' -->';
+                return $attrs;
+            }, 10, 1);
+            
+            // Render the form without the default submit button
+            echo '<div class="somecaptions-form-wrapper">';
+            cmb2_metabox_form('somecaptions-client' . '_options', 'somecaptions-client' . '-settings', array(
+                'save_button' => ' ', // Empty space to make the default button invisible
+            ));
+            
+            // Add our custom submit button outside the form
+            echo '<div class="somecaptions-form-actions">
+                <button type="button" id="somecaptions-save-settings" class="somecaptions-button somecaptions-button-primary">
+                    ' . esc_html__('Save Settings', 'somecaptions-client') . '
+                </button>
+            </div>';
+            echo '</div>';
             ?>
             
             <div class="somecaptions-loading-overlay" style="display: none;">

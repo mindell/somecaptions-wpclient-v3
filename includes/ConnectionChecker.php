@@ -65,7 +65,8 @@ class ConnectionChecker {
      * @return boolean True if connected, false otherwise
      */
     public static function check_connection_status() {
-        $api_key = cmb2_get_option('somecaptions-client' . '-settings', 'api_key', '');
+        $opts = \sw_get_settings();
+        $api_key = isset($opts['api_key']) ? sanitize_text_field($opts['api_key']) : '';
         
         // If no API key, we're definitely not connected
         if (empty($api_key)) {

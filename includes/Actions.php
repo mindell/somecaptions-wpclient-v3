@@ -39,6 +39,7 @@ class Actions {
 		// Add AJAX handlers for settings improvements
 		\add_action( 'wp_ajax_somecaptions_validate_api', array( $this, 'validate_api_settings' ) );
 		\add_action( 'wp_ajax_somecaptions_load_domain_tab', array( $this, 'load_domain_tab' ) );
+		\add_action( 'wp_ajax_somecaptions_save_settings', array( $this, 'save_general_settings' ) );
 	}
     
 	/**
@@ -326,6 +327,101 @@ class Actions {
 		$content = ob_get_clean();
 		echo \wp_kses_post($content);
 		\wp_die();
+	}
+
+	/**
+	 * Save general settings via AJAX
+	 *
+	 * @since 3.0.2
+	 *
+	 * @return void
+	 */
+	public function save_general_settings() {
+		// Always log for debugging
+		\error_log('SomeCaptions - save_general_settings: AJAX request received');
+		\error_log('POST data: ' . print_r($_POST, true));
+		
+		// Check if this is an AJAX request
+		if (!defined('DOING_AJAX') || !DOING_AJAX) {
+			\error_log('SomeCaptions - save_general_settings: Not an AJAX request');
+			\wp_send_json_error(array('message' => 'Invalid request method'));
+			return;
+		}
+
+		// Verify nonce
+		if (!isset($_POST['_wpnonce']) || !\wp_verify_nonce(\sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'somecaptions_save_settings')) {
+			\error_log('SomeCaptions - save_general_settings: Invalid nonce');
+			\error_log('Received nonce: ' . (isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : 'not set'));
+			\wp_send_json_error(array('message' => 'Security check failed'));
+			return;
+		}
+		
+		// Get the submitted settings
+		$settings = isset($_POST['somecaptions-client-settings']) ? $_POST['somecaptions-client-settings'] : array();
+		\error_log('SomeCaptions - save_general_settings: Settings array: ' . print_r($settings, true));
+		
+		// Extract and sanitize the values
+		$endpoint = isset($settings['endpoint']) ? \sanitize_text_field(wp_unslash($settings['endpoint'])) : '';
+		$api_key = isset($settings['api_key']) ? \sanitize_text_field(wp_unslash($settings['api_key'])) : '';
+		
+		\error_log('SomeCaptions - save_general_settings: Endpoint: ' . $endpoint);
+		\error_log('SomeCaptions - save_general_settings: API Key: ' . substr($api_key, 0, 5) . '...');
+		
+		if (empty($endpoint) || empty($api_key)) {
+			\error_log('SomeCaptions - save_general_settings: Empty endpoint or API key');
+			\wp_send_json_error(array('message' => 'API endpoint and key are required'));
+			return;
+		}
+		
+		// Let's check what option key is used in sw_get_settings()
+		\error_log('SomeCaptions - save_general_settings: Checking sw_get_settings() result: ' . print_r(sw_get_settings(), true));
+		
+		// The option key from the CMB2 form
+		$cmb2_option_key = 'somecaptions-client_options';
+		
+		// The option key used in sw_get_settings()
+		$settings_option_key = 'somecaptions-client-settings';
+		
+		// Get existing options from both possible keys
+		$cmb2_options = \get_option($cmb2_option_key, array());
+		$settings_options = \get_option($settings_option_key, array());
+		
+		\error_log('SomeCaptions - save_general_settings: CMB2 options: ' . print_r($cmb2_options, true));
+		\error_log('SomeCaptions - save_general_settings: Settings options: ' . print_r($settings_options, true));
+		
+		// Update both options to ensure consistency
+		$cmb2_options['endpoint'] = $endpoint;
+		$cmb2_options['api_key'] = $api_key;
+		
+		$settings_options['endpoint'] = $endpoint;
+		$settings_options['api_key'] = $api_key;
+		
+		// Force update by deleting the option first
+		\delete_option($cmb2_option_key);
+		\delete_option($settings_option_key);
+		
+		// Update both options in the database
+		$result1 = \update_option($cmb2_option_key, $cmb2_options);
+		$result2 = \update_option($settings_option_key, $settings_options);
+		
+		\error_log('SomeCaptions - save_general_settings: CMB2 update result: ' . ($result1 ? 'true' : 'false'));
+		\error_log('SomeCaptions - save_general_settings: Settings update result: ' . ($result2 ? 'true' : 'false'));
+		
+		// Get the options back to verify they were saved
+		$saved_cmb2_options = \get_option($cmb2_option_key);
+		$saved_settings_options = \get_option($settings_option_key);
+		
+		\error_log('SomeCaptions - save_general_settings: Saved CMB2 options: ' . print_r($saved_cmb2_options, true));
+		\error_log('SomeCaptions - save_general_settings: Saved settings options: ' . print_r($saved_settings_options, true));
+		
+		// Send success response
+		\wp_send_json_success(array(
+			'message' => 'Settings saved successfully!',
+			'cmb2_settings' => $saved_cmb2_options,
+			'settings' => $saved_settings_options,
+			'cmb2_result' => $result1,
+			'settings_result' => $result2
+		));
 	}
 
 }

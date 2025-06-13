@@ -211,8 +211,8 @@ msgid "Create an Account"
 msgstr "Opret en konto"
 
 #: backend/views/settings-help-modern.php:29
-msgid "Sign up for a SoMe Captions account at <a href=\"https://somecaptions.dk/signup\" target=\"_blank\">somecaptions.dk</a>"
-msgstr "Tilmeld dig en SoMe Captions-konto på <a href=\"https://somecaptions.dk/signup\" target=\"_blank\">somecaptions.dk</a>"
+msgid "Sign up for a SoMe Captions account at <a href=\"https://somecaptions.dk/sign-up\" target=\"_blank\">somecaptions.dk</a>"
+msgstr "Tilmeld dig en SoMe Captions-konto på <a href=\"https://somecaptions.dk/sign-up\" target=\"_blank\">somecaptions.dk</a>"
 
 #: backend/views/settings-help-modern.php:32
 msgid "Get Your API Key"
